@@ -1,0 +1,178 @@
+---
+import bgLogin from '../assets/bg-login.svg';
+import logo from '../assets/logo.svg';
+---
+
+<div class="login-page">
+	<!-- Fondo con patrón de líneas curvas -->
+	<img class="login-bg" src={bgLogin.src} alt="" aria-hidden="true" />
+
+	<!-- Tarjeta de login -->
+	<div class="login-card">
+		<!-- Logo y nombre -->
+		<div class="login-logo">
+			<img src={logo.src} alt="Logo Sansalica" class="login-logo__img" />
+			<span class="login-logo__brand">Sansalica</span>
+		</div>
+
+		<!-- Formulario -->
+		<form class="login-form" method="post" action="#">
+			<div class="form-group">
+				<label for="usuario">Usuario</label>
+				<input
+					type="text"
+					id="usuario"
+					name="usuario"
+					autocomplete="username"
+					spellcheck="false"
+				/>
+			</div>
+
+			<div class="form-group">
+				<label for="contrasena">Contraseña</label>
+				<input
+					type="password"
+					id="contrasena"
+					name="contrasena"
+					autocomplete="current-password"
+				/>
+			</div>
+
+			<button type="submit" class="btn-ingresar">Ingresar</button>
+		</form>
+	</div>
+</div>
+
+<style>
+	/* ── Página completa ── */
+	.login-page {
+		position: relative;
+		width: 100%;
+		min-height: 100vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+	}
+
+	/* ── Fondo ── */
+	.login-bg {
+		position: fixed;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		z-index: 0;
+	}
+
+	/* ── Tarjeta ── */
+	.login-card {
+		position: relative;
+		z-index: 1;
+		background-color: var(--color-white);
+		border-radius: 20px;
+		box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+		padding: 48px 44px 52px;
+		width: 100%;
+		max-width: 340px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 36px;
+	}
+
+	/* ── Logo ── */
+	.login-logo {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 6px;
+	}
+
+	.login-logo__img {
+		width: 44px;
+		height: auto;
+	}
+
+	.login-logo__brand {
+		font-family: var(--font-primary);
+		font-size: 19px;
+		font-weight: 500;
+		color: var(--color-black);
+		letter-spacing: 0.06em;
+	}
+
+	/* ── Formulario ── */
+	.login-form {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 18px;
+	}
+
+	.form-group {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+
+	.form-group label {
+		font-family: var(--font-primary);
+		font-size: 13.5px;
+		font-weight: 400;
+		color: var(--color-black);
+	}
+
+	.form-group input {
+		width: 100%;
+		height: 42px;
+		border: 1.5px solid var(--color-gray);
+		border-radius: 999px;
+		padding: 0 18px;
+		font-family: var(--font-primary);
+		font-size: 14px;
+		color: var(--color-black);
+		background-color: var(--color-white);
+		outline: none;
+		transition: border-color 0.2s ease;
+	}
+
+	.form-group input:focus {
+		border-color: var(--color-navy);
+	}
+
+	/* ── Botón ── */
+	.btn-ingresar {
+		margin-top: 6px;
+		background-color: var(--color-navy);
+		color: var(--color-white);
+		font-family: var(--font-primary);
+		font-size: 15px;
+		font-weight: 500;
+		letter-spacing: 0.02em;
+		border: none;
+		border-radius: 999px;
+		padding: 10px 44px;
+		cursor: pointer;
+		transition: opacity 0.2s ease;
+	}
+
+	.btn-ingresar:hover {
+		opacity: 0.85;
+	}
+
+	.btn-ingresar:active {
+		opacity: 0.75;
+	}
+
+	/* ── Responsive ── */
+	@media (max-width: 480px) {
+		.login-card {
+			margin: 20px;
+			padding: 36px 28px 42px;
+			max-width: 100%;
+		}
+	}
+</style>
