@@ -1,0 +1,220 @@
+---
+const { inmueble } = Astro.props;
+
+// Helper to format price like "$2.9 mil mill." or "$980 M"
+function formatPrice(priceStr: string | number) {
+	const price = typeof priceStr === 'string' ? parseFloat(priceStr) : priceStr;
+	if (isNaN(price)) return priceStr;
+
+	if (price >= 1000000000) {
+		const val = price / 1000000000;
+		return `$${val % 1 !== 0 ? val.toFixed(1) : val} mil mill.`;
+	} else if (price >= 1000000) {
+		const val = price / 1000000;
+		return `$${val % 1 !== 0 ? val.toFixed(1) : val} M`;
+	}
+	// Fallback for smaller values
+	return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(price);
+}
+
+const formattedPrice = formatPrice(inmueble.price);
+const photoUrl = inmueble.photos && inmueble.photos.length > 0 
+	? inmueble.photos[0].url 
+	: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&q=80&w=400';
+
+// 'Venta' or 'Alquiler'/'Renta' (based on operation_type from backend)
+const operation = inmueble.operation_type === 'Venta' ? 'Venta' : 'Renta';
+const badgeClass = operation === 'Venta' ? 'badge-venta' : 'badge-renta';
+---
+
+<article class="inmueble-card">
+	<div class="image-container">
+		<img src={photoUrl} alt={inmueble.title} class="thumbnail" />
+		<span class={`operation-badge ${badgeClass}`}>{operation}</span>
+	</div>
+
+	<div class="details-container">
+		<div class="primary-info">
+			<h3 class="title">{inmueble.title}</h3>
+			<p class="location">
+				<span class="icon">📍</span> {inmueble.location}
+			</p>
+		</div>
+
+		<div class="secondary-info">
+			<div class="metrics">
+				<p class="price">{formattedPrice}</p>
+				<p class="area">{Math.round(inmueble.square_meters)} m²</p>
+			</div>
+
+			<div class="actions">
+				<button class="status-btn">
+					{inmueble.status} <span class="chevron">▼</span>
+				</button>
+				<button class="options-btn" aria-label="Opciones">⋮</button>
+			</div>
+		</div>
+	</div>
+</article>
+
+<style>
+	.inmueble-card {
+		background: var(--color-white);
+		border-radius: 12px;
+		display: flex;
+		padding: 12px;
+		gap: 20px;
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+		transition: transform 0.2s ease, box-shadow 0.2s ease;
+		align-items: center;
+	}
+
+	.inmueble-card:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+	}
+
+	.image-container {
+		position: relative;
+		width: 160px;
+		height: 100px;
+		flex-shrink: 0;
+		border-radius: 8px;
+		overflow: hidden;
+	}
+
+	.thumbnail {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.operation-badge {
+		position: absolute;
+		bottom: 8px;
+		right: 8px;
+		padding: 4px 12px;
+		border-radius: 12px;
+		font-size: 11px;
+		font-weight: 600;
+		color: var(--color-white);
+		letter-spacing: 0.5px;
+	}
+
+	.badge-venta {
+		background-color: #a38c4b; /* Gold/Bronze */
+	}
+
+	.badge-renta {
+		background-color: var(--color-navy); /* Navy Blue */
+	}
+
+	.details-container {
+		display: flex;
+		flex: 1;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.primary-info {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+
+	.title {
+		font-family: var(--font-primary);
+		font-size: 18px;
+		font-weight: 600;
+		color: var(--color-navy);
+		margin: 0;
+	}
+
+	.location {
+		font-size: 13px;
+		color: var(--color-gray);
+		margin: 0;
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+	
+	.location .icon {
+		font-size: 14px;
+	}
+
+	.secondary-info {
+		display: flex;
+		align-items: center;
+		gap: 40px;
+	}
+
+	.metrics {
+		text-align: right;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	.price {
+		font-family: var(--font-primary);
+		font-size: 16px;
+		font-weight: 600;
+		color: #a38c4b; /* Gold/Bronze */
+		margin: 0;
+	}
+
+	.area {
+		font-size: 12px;
+		color: var(--color-gray);
+		margin: 0;
+	}
+
+	.actions {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+	}
+
+	.status-btn {
+		background: #f1ebd7;
+		color: #a38c4b;
+		border: none;
+		padding: 6px 14px;
+		border-radius: 16px;
+		font-size: 12px;
+		font-weight: 500;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		cursor: pointer;
+		transition: background 0.2s;
+	}
+
+	.status-btn:hover {
+		background: #e5dac1;
+	}
+
+	.chevron {
+		font-size: 8px;
+	}
+
+	.options-btn {
+		background: none;
+		border: none;
+		color: #a38c4b;
+		font-size: 20px;
+		cursor: pointer;
+		padding: 4px;
+		line-height: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		transition: background 0.2s;
+	}
+
+	.options-btn:hover {
+		background: rgba(163, 140, 75, 0.1);
+	}
+</style>

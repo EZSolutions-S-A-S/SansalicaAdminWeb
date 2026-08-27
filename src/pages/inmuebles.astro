@@ -1,0 +1,242 @@
+---
+import AdminLayout from '../layouts/AdminLayout.astro';
+import InmuebleCard from '../components/InmuebleCard.astro';
+
+// This safely accesses the .env variable, falling back if undefined.
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://127.0.0.1:8000/api/';
+
+let inmuebles = [];
+let error = null;
+
+try {
+	// Try fetching from the Django Backend API
+	const response = await fetch(`${API_URL}inmuebles/`);
+	if (response.ok) {
+		const data = await response.json();
+		inmuebles = data.results || [];
+	} else {
+		throw new Error('Failed to fetch from backend');
+	}
+} catch (e) {
+	console.error('Error fetching data, falling back to mock data:', e.message);
+	error = e.message;
+	
+	// Mock data corresponding closely to the provided design image
+	inmuebles = [
+		{
+			id: 1,
+			title: 'Penthouse Panorámico en El Rosales',
+			location: 'Bogotá - El Rosales | Penthouse',
+			price: '2900000000.00',
+			square_meters: '320.00',
+			operation_type: 'Venta',
+			status: 'Disponible',
+			photos: [{ url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&q=80' }]
+		},
+		{
+			id: 2,
+			title: 'Apartamento Moderno en El Poblado',
+			location: 'Medellín - El Poblado | Apartamento',
+			price: '980000000.00',
+			square_meters: '145.00',
+			operation_type: 'Renta', // Backend uses 'Alquiler', but design says 'Renta'
+			status: 'Disponible',
+			photos: [{ url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&q=80' }]
+		},
+		{
+			id: 3,
+			title: 'Casa Colonial en Castillogrande',
+			location: 'Cartagena - Castillogrande | Casa',
+			price: '4200000000.00',
+			square_meters: '480.00',
+			operation_type: 'Venta',
+			status: 'Disponible',
+			photos: [{ url: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=400&q=80' }]
+		},
+		{
+			id: 4,
+			title: 'Apartamento Ejecutivo en Laureles',
+			location: 'Medellín - Laureles | Apartamento',
+			price: '5000000.00',
+			square_meters: '100.00',
+			operation_type: 'Venta',
+			status: 'Disponible',
+			photos: [{ url: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&q=80' }]
+		}
+	];
+}
+---
+
+<AdminLayout title="Inmuebles - Admin Panel">
+	<div class="page-container">
+		<header class="page-header">
+			<span class="subtitle">GESTIÓN</span>
+			<div class="title-row">
+				<h1>Inmuebles</h1>
+				<button class="btn-primary">+ Nuevo</button>
+			</div>
+			<p class="count-text">{inmuebles.length} de {inmuebles.length} mostrados</p>
+			
+			{error && <p class="error-msg">Mostrando datos de prueba temporales (API no disponible).</p>}
+		</header>
+
+		<div class="filters-row">
+			<div class="search-box">
+				<span class="search-icon">🔍</span>
+				<input type="text" placeholder="Buscar inmueble" />
+			</div>
+			<div class="dropdowns">
+				<select class="filter-select">
+					<option value="">Todas las ciuda...</option>
+				</select>
+				<select class="filter-select">
+					<option value="">Todos los estad...</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="inmuebles-list">
+			{inmuebles.map((inmueble) => (
+				<InmuebleCard inmueble={inmueble} />
+			))}
+		</div>
+	</div>
+</AdminLayout>
+
+<style>
+	.page-container {
+		max-width: 1000px;
+		margin: 0 auto;
+	}
+
+	.page-header {
+		margin-bottom: 24px;
+	}
+
+	.subtitle {
+		font-family: var(--font-primary);
+		color: #a38c4b; /* Gold/Bronze */
+		font-size: 18px;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		font-weight: 600;
+	}
+
+	.title-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 4px;
+	}
+
+	h1 {
+		font-family: var(--font-primary);
+		color: var(--color-navy);
+		font-size: 42px;
+		font-weight: 700;
+	}
+
+	.btn-primary {
+		background: #e2d7b5; /* Light gold from design */
+		color: #8c763c;
+		border: none;
+		padding: 10px 20px;
+		border-radius: 20px;
+		font-size: 15px;
+		font-weight: 600;
+		cursor: pointer;
+		transition: background 0.2s;
+	}
+
+	.btn-primary:hover {
+		background: #d8cba4;
+	}
+
+	.count-text {
+		color: var(--color-gray);
+		font-size: 14px;
+		margin-top: 4px;
+	}
+
+	.error-msg {
+		color: #d83333;
+		font-size: 12px;
+		margin-top: 8px;
+		background: rgba(216, 51, 51, 0.1);
+		padding: 4px 8px;
+		display: inline-block;
+		border-radius: 4px;
+	}
+
+	.filters-row {
+		display: flex;
+		gap: 16px;
+		margin-bottom: 30px;
+	}
+
+	.search-box {
+		flex: 1;
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
+
+	.search-icon {
+		position: absolute;
+		left: 14px;
+		color: #b4b4b4;
+		font-size: 14px;
+	}
+
+	.search-box input {
+		width: 100%;
+		padding: 12px 14px 12px 40px;
+		border: 1px solid #e0e0e0;
+		border-radius: 8px;
+		font-family: var(--font-sans);
+		font-size: 14px;
+		outline: none;
+		transition: border-color 0.2s;
+	}
+
+	.search-box input:focus {
+		border-color: #a38c4b;
+	}
+	
+	.search-box input::placeholder {
+		color: #b4b4b4;
+	}
+
+	.dropdowns {
+		display: flex;
+		gap: 16px;
+	}
+
+	.filter-select {
+		padding: 12px 30px 12px 16px;
+		border: 1px solid #e0e0e0;
+		border-radius: 8px;
+		background-color: var(--color-white);
+		font-family: var(--font-sans);
+		font-size: 14px;
+		color: #666;
+		appearance: none;
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+		background-repeat: no-repeat;
+		background-position: right 10px center;
+		background-size: 14px;
+		cursor: pointer;
+		outline: none;
+		min-width: 160px;
+	}
+
+	.filter-select:focus {
+		border-color: #a38c4b;
+	}
+
+	.inmuebles-list {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+</style>
