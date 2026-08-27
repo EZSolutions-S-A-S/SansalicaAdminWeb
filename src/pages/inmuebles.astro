@@ -40,7 +40,7 @@ try {
 			price: '980000000.00',
 			square_meters: '145.00',
 			operation_type: 'Renta', // Backend uses 'Alquiler', but design says 'Renta'
-			status: 'Disponible',
+			status: 'Reservado',
 			photos: [{ url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&q=80' }]
 		},
 		{
@@ -60,7 +60,7 @@ try {
 			price: '5000000.00',
 			square_meters: '100.00',
 			operation_type: 'Venta',
-			status: 'Disponible',
+			status: 'Vendido',
 			photos: [{ url: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&q=80' }]
 		}
 	];
@@ -76,13 +76,16 @@ try {
 				<button class="btn-primary">+ Nuevo</button>
 			</div>
 			<p class="count-text">{inmuebles.length} de {inmuebles.length} mostrados</p>
-			
-			{error && <p class="error-msg">Mostrando datos de prueba temporales (API no disponible).</p>}
 		</header>
 
 		<div class="filters-row">
 			<div class="search-box">
-				<span class="search-icon">🔍</span>
+				<span class="search-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<circle cx="11" cy="11" r="8"></circle>
+						<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+					</svg>
+				</span>
 				<input type="text" placeholder="Buscar inmueble" />
 			</div>
 			<div class="dropdowns">
@@ -105,7 +108,8 @@ try {
 
 <style>
 	.page-container {
-		max-width: 1000px;
+		width: 100%;
+		max-width: 1100px;
 		margin: 0 auto;
 	}
 
@@ -131,7 +135,7 @@ try {
 
 	h1 {
 		font-family: var(--font-primary);
-		color: var(--color-navy);
+		color: #1D3872;
 		font-size: 42px;
 		font-weight: 700;
 	}
@@ -153,7 +157,7 @@ try {
 	}
 
 	.count-text {
-		color: var(--color-gray);
+		color: #BEBFBF; /* Updated exactly as requested */
 		font-size: 14px;
 		margin-top: 4px;
 	}

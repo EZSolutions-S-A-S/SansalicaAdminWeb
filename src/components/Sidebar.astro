@@ -5,10 +5,8 @@ const currentPath = Astro.url.pathname;
 <aside class="sidebar">
 	<div class="brand">
 		<div class="logo">
-			<!-- Placeholder for logo image, using styled text for now -->
 			<div class="logo-icon">
-				<span class="gold-bars">||</span>
-				<span class="logo-text-small">Sansalica</span>
+				<img src="/logo.png" alt="Sansalica Logo" class="logo-img" />
 			</div>
 		</div>
 		<div class="brand-text">
@@ -16,7 +14,9 @@ const currentPath = Astro.url.pathname;
 			<p>Admin Panel</p>
 		</div>
 		<button class="theme-toggle" aria-label="Toggle dark mode">
-			🌙
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+			</svg>
 		</button>
 	</div>
 
@@ -25,26 +25,59 @@ const currentPath = Astro.url.pathname;
 		<ul>
 			<li>
 				<a href="/" class={currentPath === '/' ? 'active' : ''}>
-					<span class="icon">↗</span> Dashboard
+					<span class="icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+					</span> 
+					Dashboard
 				</a>
 			</li>
 			<li>
 				<a href="/inmuebles" class={currentPath.startsWith('/inmuebles') ? 'active' : ''}>
-					<span class="icon">⊞</span> Inmuebles
+					<span class="icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+					</span> 
+					Inmuebles
 				</a>
 			</li>
 			<li>
 				<a href="/nuevo" class={currentPath === '/nuevo' ? 'active' : ''}>
-					<span class="icon">+</span> Nuevo
+					<span class="icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+					</span> 
+					Nuevo
 				</a>
 			</li>
 			<li>
 				<a href="/perfil" class={currentPath === '/perfil' ? 'active' : ''}>
-					<span class="icon">⯍</span> Perfil
+					<span class="icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+					</span> 
+					Perfil
 				</a>
 			</li>
 		</ul>
 	</nav>
+
+	<div class="bottom-menu">
+		<ul>
+			<li>
+				<a href="/">
+					<span class="icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+					</span>
+					Sitio público
+				</a>
+			</li>
+			<li>
+				<a href="/logout">
+					<span class="icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+					</span>
+					Cerrar sesión
+				</a>
+			</li>
+		</ul>
+	</div>
 </aside>
 
 <style>
@@ -70,25 +103,19 @@ const currentPath = Astro.url.pathname;
 	}
 
 	.logo-icon {
-		background-color: #314a7e; /* Slightly lighter navy */
-		border-radius: 8px;
-		padding: 8px;
+		background-color: #3e527b; /* Matches the rounded square color from design */
+		border-radius: 12px;
+		width: 50px;
+		height: 50px;
 		display: flex;
-		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		color: #d4af37; /* Gold color from the design */
 	}
 
-	.gold-bars {
-		font-weight: bold;
-		letter-spacing: -2px;
-	}
-
-	.logo-text-small {
-		font-size: 10px;
-		font-family: var(--font-primary);
-		margin-top: 4px;
+	.logo-img {
+		width: 80%;
+		height: 80%;
+		object-fit: contain;
 	}
 
 	.brand-text h2 {
@@ -107,13 +134,21 @@ const currentPath = Astro.url.pathname;
 
 	.theme-toggle {
 		margin-left: auto;
-		background: #2a4478;
+		background-color: #3e527b; /* Same color as logo background */
 		border: none;
-		border-radius: 6px;
+		border-radius: 8px;
+		width: 32px;
+		height: 32px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		cursor: pointer;
-		padding: 6px;
-		font-size: 14px;
 		color: inherit;
+		transition: opacity 0.2s;
+	}
+	
+	.theme-toggle:hover {
+		opacity: 0.8;
 	}
 
 	.menu {
@@ -163,8 +198,48 @@ const currentPath = Astro.url.pathname;
 	}
 
 	.menu .icon {
-		font-size: 18px;
 		width: 24px;
-		text-align: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.bottom-menu {
+		margin-top: auto;
+		padding: 24px 0;
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.bottom-menu ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.bottom-menu a {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 12px 24px;
+		color: #aeb9ce;
+		text-decoration: none;
+		font-size: 15px;
+		transition: all 0.2s ease;
+		border-left: 3px solid transparent;
+	}
+
+	.bottom-menu a:hover {
+		color: var(--color-white);
+		background-color: rgba(255, 255, 255, 0.05);
+	}
+
+	.bottom-menu .icon {
+		width: 24px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 </style>
