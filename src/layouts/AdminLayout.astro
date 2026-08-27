@@ -1,0 +1,47 @@
+---
+import Layout from './Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+
+interface Props {
+	title?: string;
+}
+
+const { title = 'Admin Panel - Sansalica' } = Astro.props;
+---
+
+<Layout>
+	<div class="admin-wrapper">
+		<Sidebar />
+		<main class="main-content">
+			<slot />
+		</main>
+	</div>
+</Layout>
+
+<style>
+	.admin-wrapper {
+		display: flex;
+		min-height: 100vh;
+		background-color: var(--color-light);
+	}
+
+	.main-content {
+		flex: 1;
+		padding: 40px 48px;
+		overflow-y: auto;
+		height: 100vh;
+	}
+
+	/* Responsive design adjustments */
+	@media (max-width: 768px) {
+		.admin-wrapper {
+			flex-direction: column;
+		}
+		
+		.main-content {
+			padding: 20px;
+			height: auto;
+			overflow-y: visible;
+		}
+	}
+</style>

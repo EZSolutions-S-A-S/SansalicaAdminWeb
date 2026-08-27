@@ -1,0 +1,170 @@
+---
+const currentPath = Astro.url.pathname;
+---
+
+<aside class="sidebar">
+	<div class="brand">
+		<div class="logo">
+			<!-- Placeholder for logo image, using styled text for now -->
+			<div class="logo-icon">
+				<span class="gold-bars">||</span>
+				<span class="logo-text-small">Sansalica</span>
+			</div>
+		</div>
+		<div class="brand-text">
+			<h2>Sansalica</h2>
+			<p>Admin Panel</p>
+		</div>
+		<button class="theme-toggle" aria-label="Toggle dark mode">
+			🌙
+		</button>
+	</div>
+
+	<nav class="menu">
+		<span class="menu-label">MENÚ</span>
+		<ul>
+			<li>
+				<a href="/" class={currentPath === '/' ? 'active' : ''}>
+					<span class="icon">↗</span> Dashboard
+				</a>
+			</li>
+			<li>
+				<a href="/inmuebles" class={currentPath.startsWith('/inmuebles') ? 'active' : ''}>
+					<span class="icon">⊞</span> Inmuebles
+				</a>
+			</li>
+			<li>
+				<a href="/nuevo" class={currentPath === '/nuevo' ? 'active' : ''}>
+					<span class="icon">+</span> Nuevo
+				</a>
+			</li>
+			<li>
+				<a href="/perfil" class={currentPath === '/perfil' ? 'active' : ''}>
+					<span class="icon">⯍</span> Perfil
+				</a>
+			</li>
+		</ul>
+	</nav>
+</aside>
+
+<style>
+	.sidebar {
+		width: 280px;
+		background-color: var(--color-navy);
+		color: var(--color-white);
+		display: flex;
+		flex-direction: column;
+		height: 100vh;
+		position: sticky;
+		top: 0;
+		left: 0;
+		box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+	}
+
+	.brand {
+		display: flex;
+		align-items: center;
+		padding: 30px 24px;
+		gap: 16px;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.logo-icon {
+		background-color: #314a7e; /* Slightly lighter navy */
+		border-radius: 8px;
+		padding: 8px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		color: #d4af37; /* Gold color from the design */
+	}
+
+	.gold-bars {
+		font-weight: bold;
+		letter-spacing: -2px;
+	}
+
+	.logo-text-small {
+		font-size: 10px;
+		font-family: var(--font-primary);
+		margin-top: 4px;
+	}
+
+	.brand-text h2 {
+		font-size: 22px;
+		font-weight: 600;
+		margin: 0;
+		line-height: 1.2;
+	}
+
+	.brand-text p {
+		font-size: 12px;
+		margin: 0;
+		color: #aeb9ce;
+		font-family: var(--font-sans);
+	}
+
+	.theme-toggle {
+		margin-left: auto;
+		background: #2a4478;
+		border: none;
+		border-radius: 6px;
+		cursor: pointer;
+		padding: 6px;
+		font-size: 14px;
+		color: inherit;
+	}
+
+	.menu {
+		padding: 24px 0;
+	}
+
+	.menu-label {
+		display: block;
+		padding: 0 24px;
+		font-size: 12px;
+		letter-spacing: 1px;
+		color: #aeb9ce;
+		margin-bottom: 16px;
+	}
+
+	.menu ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.menu a {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 12px 24px;
+		color: #aeb9ce;
+		text-decoration: none;
+		font-size: 15px;
+		transition: all 0.2s ease;
+		border-left: 3px solid transparent;
+	}
+
+	.menu a:hover {
+		color: var(--color-white);
+		background-color: rgba(255, 255, 255, 0.05);
+	}
+
+	.menu a.active {
+		color: #d4af37; /* Gold for active state */
+		background-color: rgba(255, 255, 255, 0.08);
+		border-left: 3px solid #d4af37;
+		font-weight: 500;
+	}
+
+	.menu .icon {
+		font-size: 18px;
+		width: 24px;
+		text-align: center;
+	}
+</style>
