@@ -59,14 +59,27 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 			</div>
 
 			<div class="actions">
-				<button class={`status-btn ${statusClass}`}>
-					{inmueble.status} <span class="chevron">▼</span>
-				</button>
+				<select class={`status-select ${statusClass}`}>
+					<option value="Disponible" selected={inmueble.status === 'Disponible'}>Disponible</option>
+					<option value="Reservado" selected={inmueble.status === 'Reservado'}>Reservado</option>
+					<option value="Vendido" selected={inmueble.status === 'Vendido'}>Vendido</option>
+				</select>
 				<button class="options-btn" aria-label="Opciones">⋮</button>
 			</div>
 		</div>
 	</div>
 </article>
+
+<script>
+	// Handle dynamic color changes on select
+	document.querySelectorAll('.status-select').forEach(select => {
+		select.addEventListener('change', (e) => {
+			const target = e.target as HTMLSelectElement;
+			target.classList.remove('status-disponible', 'status-reservado', 'status-vendido');
+			target.classList.add(`status-${target.value.toLowerCase()}`);
+		});
+	});
+</script>
 
 <style>
 	.inmueble-card {
@@ -193,41 +206,45 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 		gap: 12px;
 	}
 
-	/* Dynamic Status Colors */
-	.status-btn {
+	/* Dynamic Status Select Pill */
+	.status-select {
+		appearance: none;
+		-webkit-appearance: none;
 		border: none;
-		padding: 6px 12px;
 		border-radius: 16px;
+		padding: 6px 24px 6px 12px;
 		font-size: 12px;
 		font-weight: 500;
-		display: flex;
-		align-items: center;
-		justify-content: space-between; /* Pushes chevron to the right */
-		width: 105px; /* Fixed width for consistency */
+		width: 105px;
 		cursor: pointer;
-		transition: background 0.2s;
+		outline: none;
+		font-family: inherit;
+		background-repeat: no-repeat;
+		background-position: right 10px center;
+		background-size: 8px;
+		transition: filter 0.2s;
+	}
+
+	.status-select:hover {
+		filter: brightness(0.95);
 	}
 
 	.status-disponible {
-		background: #f1ebd7;
+		background-color: #f1ebd7;
 		color: #a38c4b;
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a38c4b' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
 	}
-	.status-disponible:hover { background: #e5dac1; }
 
 	.status-reservado {
-		background: #e6f0fd;
+		background-color: #e6f0fd;
 		color: #3a73b8;
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a73b8' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
 	}
-	.status-reservado:hover { background: #d0e1f9; }
 
 	.status-vendido {
-		background: #fde6e6;
+		background-color: #fde6e6;
 		color: #b83a3a;
-	}
-	.status-vendido:hover { background: #f9d0d0; }
-
-	.chevron {
-		font-size: 8px;
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b83a3a' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
 	}
 
 	.options-btn {
