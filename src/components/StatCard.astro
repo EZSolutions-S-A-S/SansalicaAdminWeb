@@ -8,7 +8,7 @@ const { value, label } = Astro.props;
 ---
 
 <div class="stat-card">
-	<div class="stat-icon">
+	<div class="stat-icon-wrapper">
 		<slot name="icon" />
 	</div>
 	<p class="stat-value">{value}</p>
@@ -17,24 +17,28 @@ const { value, label } = Astro.props;
 
 <style>
 	.stat-card {
-		background-color: var(--color-white);
+		background-color: rgba(207, 172, 109, 0.14);
 		border-radius: 16px;
 		padding: 28px 24px;
 		display: flex;
 		flex-direction: column;
-		gap: 10px;
-		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+		gap: 16px;
 	}
 
-	.stat-icon {
-		color: #a38c4b;
+	.stat-icon-wrapper {
+		width: 44px;
+		height: 44px;
+		background-color: rgba(207, 172, 109, 0.28);
+		border-radius: 10px;
 		display: flex;
 		align-items: center;
+		justify-content: center;
+		color: var(--color-gold);
 	}
 
 	.stat-value {
 		font-family: var(--font-primary);
-		font-size: 32px;
+		font-size: 34px;
 		font-weight: 700;
 		color: var(--color-navy);
 		margin: 0;
@@ -44,7 +48,7 @@ const { value, label } = Astro.props;
 	.stat-label {
 		font-family: var(--font-primary);
 		font-size: 14px;
-		color: var(--color-gray);
+		color: var(--color-gray-mid);
 		margin: 0;
 	}
 </style>

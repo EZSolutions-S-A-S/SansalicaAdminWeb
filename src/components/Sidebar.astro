@@ -4,17 +4,15 @@ const currentPath = Astro.url.pathname;
 
 <aside class="sidebar">
 	<div class="brand">
-		<div class="logo">
-			<div class="logo-icon">
-				<img src="/logo.png" alt="Sansalica Logo" class="logo-img" />
-			</div>
+		<div class="logo-icon">
+			<img src="/logo.png" alt="Sansalica Logo" class="logo-img" />
 		</div>
 		<div class="brand-text">
 			<h2>Sansalica</h2>
 			<p>Admin Panel</p>
 		</div>
 		<button class="theme-toggle" aria-label="Toggle dark mode">
-			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 				<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
 			</svg>
 		</button>
@@ -24,10 +22,10 @@ const currentPath = Astro.url.pathname;
 		<span class="menu-label">MENÚ</span>
 		<ul>
 			<li>
-				<a href="/" class={currentPath === '/' ? 'active' : ''}>
+				<a href="/dashboard" class={currentPath === '/dashboard' ? 'active' : ''}>
 					<span class="icon">
 						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
-					</span> 
+					</span>
 					Dashboard
 				</a>
 			</li>
@@ -35,7 +33,7 @@ const currentPath = Astro.url.pathname;
 				<a href="/inmuebles" class={currentPath.startsWith('/inmuebles') ? 'active' : ''}>
 					<span class="icon">
 						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-					</span> 
+					</span>
 					Inmuebles
 				</a>
 			</li>
@@ -43,7 +41,7 @@ const currentPath = Astro.url.pathname;
 				<a href="/nuevo" class={currentPath === '/nuevo' ? 'active' : ''}>
 					<span class="icon">
 						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-					</span> 
+					</span>
 					Nuevo
 				</a>
 			</li>
@@ -51,7 +49,7 @@ const currentPath = Astro.url.pathname;
 				<a href="/perfil" class={currentPath === '/perfil' ? 'active' : ''}>
 					<span class="icon">
 						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
-					</span> 
+					</span>
 					Perfil
 				</a>
 			</li>
@@ -83,7 +81,7 @@ const currentPath = Astro.url.pathname;
 <style>
 	.sidebar {
 		width: 280px;
-		background-color: var(--color-navy);
+		background-color: var(--color-navy-dark);
 		color: var(--color-white);
 		display: flex;
 		flex-direction: column;
@@ -91,50 +89,58 @@ const currentPath = Astro.url.pathname;
 		position: sticky;
 		top: 0;
 		left: 0;
-		box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+		box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+		flex-shrink: 0;
 	}
 
 	.brand {
 		display: flex;
 		align-items: center;
-		padding: 30px 24px;
-		gap: 16px;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		padding: 28px 20px;
+		gap: 12px;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 	}
 
 	.logo-icon {
-		background-color: #3e527b; /* Matches the rounded square color from design */
+		background-color: rgba(255, 255, 255, 0.08);
 		border-radius: 12px;
-		width: 50px;
-		height: 50px;
+		width: 46px;
+		height: 46px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		flex-shrink: 0;
 	}
 
 	.logo-img {
-		width: 80%;
-		height: 80%;
+		width: 75%;
+		height: 75%;
 		object-fit: contain;
 	}
 
+	.brand-text {
+		flex: 1;
+		min-width: 0;
+	}
+
 	.brand-text h2 {
-		font-size: 22px;
+		font-family: var(--font-primary);
+		font-size: 20px;
 		font-weight: 600;
 		margin: 0;
 		line-height: 1.2;
+		color: var(--color-white);
 	}
 
 	.brand-text p {
 		font-size: 12px;
 		margin: 0;
-		color: #aeb9ce;
-		font-family: var(--font-sans);
+		color: var(--color-gray-blue);
+		font-family: var(--font-primary);
 	}
 
 	.theme-toggle {
-		margin-left: auto;
-		background-color: #3e527b; /* Same color as logo background */
+		background-color: rgba(255, 255, 255, 0.08);
 		border: none;
 		border-radius: 8px;
 		width: 32px;
@@ -143,12 +149,12 @@ const currentPath = Astro.url.pathname;
 		align-items: center;
 		justify-content: center;
 		cursor: pointer;
-		color: inherit;
 		transition: opacity 0.2s;
+		flex-shrink: 0;
 	}
-	
+
 	.theme-toggle:hover {
-		opacity: 0.8;
+		opacity: 0.75;
 	}
 
 	.menu {
@@ -157,89 +163,63 @@ const currentPath = Astro.url.pathname;
 
 	.menu-label {
 		display: block;
-		padding: 0 24px;
-		font-size: 12px;
-		letter-spacing: 1px;
-		color: #aeb9ce;
-		margin-bottom: 16px;
+		padding: 0 20px;
+		font-size: 11px;
+		letter-spacing: 1.5px;
+		color: var(--color-gray-blue);
+		margin-bottom: 12px;
+		font-family: var(--font-primary);
 	}
 
-	.menu ul {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-	}
-
-	.menu a {
-		display: flex;
-		align-items: center;
-		gap: 12px;
-		padding: 12px 24px;
-		color: #aeb9ce;
-		text-decoration: none;
-		font-size: 15px;
-		transition: all 0.2s ease;
-		border-left: 3px solid transparent;
-	}
-
-	.menu a:hover {
-		color: var(--color-white);
-		background-color: rgba(255, 255, 255, 0.05);
-	}
-
-	.menu a.active {
-		color: #d4af37; /* Gold for active state */
-		background-color: rgba(255, 255, 255, 0.08);
-		border-left: 3px solid #d4af37;
-		font-weight: 500;
-	}
-
-	.menu .icon {
-		width: 24px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.bottom-menu {
-		margin-top: auto;
-		padding: 24px 0;
-		border-top: 1px solid rgba(255, 255, 255, 0.1);
-	}
-
+	.menu ul,
 	.bottom-menu ul {
 		list-style: none;
 		padding: 0;
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
+		gap: 2px;
 	}
 
+	.menu a,
 	.bottom-menu a {
 		display: flex;
 		align-items: center;
 		gap: 12px;
-		padding: 12px 24px;
-		color: #aeb9ce;
+		padding: 11px 20px;
+		color: var(--color-gray-blue);
 		text-decoration: none;
+		font-family: var(--font-primary);
 		font-size: 15px;
 		transition: all 0.2s ease;
 		border-left: 3px solid transparent;
 	}
 
+	.menu a:hover,
 	.bottom-menu a:hover {
 		color: var(--color-white);
 		background-color: rgba(255, 255, 255, 0.05);
 	}
 
+	.menu a.active {
+		color: var(--color-gold);
+		background-color: rgba(201, 169, 110, 0.12);
+		border-left: 3px solid var(--color-gold);
+		font-weight: 500;
+	}
+
+	.menu .icon,
 	.bottom-menu .icon {
-		width: 24px;
+		width: 22px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		flex-shrink: 0;
+	}
+
+	.bottom-menu {
+		margin-top: auto;
+		padding: 20px 0;
+		border-top: 1px solid rgba(255, 255, 255, 0.08);
 	}
 </style>

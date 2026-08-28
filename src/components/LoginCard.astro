@@ -4,18 +4,14 @@ import logo from '../assets/logo.svg';
 ---
 
 <div class="login-page">
-	<!-- Fondo con patrón de líneas curvas -->
 	<img class="login-bg" src={bgLogin.src} alt="" aria-hidden="true" />
 
-	<!-- Tarjeta de login -->
 	<div class="login-card">
-		<!-- Logo y nombre -->
 		<div class="login-logo">
 			<img src={logo.src} alt="Logo Sansalica" class="login-logo__img" />
 			<span class="login-logo__brand">Sansalica</span>
 		</div>
 
-		<!-- Formulario -->
 		<form class="login-form" method="post" action="#">
 			<div class="form-group">
 				<label for="usuario">Usuario</label>
@@ -44,7 +40,6 @@ import logo from '../assets/logo.svg';
 </div>
 
 <style>
-	/* ── Página completa ── */
 	.login-page {
 		position: relative;
 		width: 100%;
@@ -55,7 +50,6 @@ import logo from '../assets/logo.svg';
 		overflow: hidden;
 	}
 
-	/* ── Fondo ── */
 	.login-bg {
 		position: fixed;
 		inset: 0;
@@ -65,7 +59,6 @@ import logo from '../assets/logo.svg';
 		z-index: 0;
 	}
 
-	/* ── Tarjeta ── */
 	.login-card {
 		position: relative;
 		z-index: 1;
@@ -81,7 +74,6 @@ import logo from '../assets/logo.svg';
 		gap: 36px;
 	}
 
-	/* ── Logo ── */
 	.login-logo {
 		display: flex;
 		flex-direction: column;
@@ -98,11 +90,10 @@ import logo from '../assets/logo.svg';
 		font-family: var(--font-primary);
 		font-size: 19px;
 		font-weight: 500;
-		color: var(--color-black);
+		color: var(--color-navy);
 		letter-spacing: 0.06em;
 	}
 
-	/* ── Formulario ── */
 	.login-form {
 		width: 100%;
 		display: flex;
@@ -122,7 +113,7 @@ import logo from '../assets/logo.svg';
 		font-family: var(--font-primary);
 		font-size: 13.5px;
 		font-weight: 400;
-		color: var(--color-black);
+		color: var(--color-navy);
 	}
 
 	.form-group input {
@@ -133,7 +124,7 @@ import logo from '../assets/logo.svg';
 		padding: 0 18px;
 		font-family: var(--font-primary);
 		font-size: 14px;
-		color: var(--color-black);
+		color: var(--color-navy);
 		background-color: var(--color-white);
 		outline: none;
 		transition: border-color 0.2s ease;
@@ -143,7 +134,6 @@ import logo from '../assets/logo.svg';
 		border-color: var(--color-navy);
 	}
 
-	/* ── Botón ── */
 	.btn-ingresar {
 		margin-top: 6px;
 		background-color: var(--color-navy);
@@ -167,7 +157,6 @@ import logo from '../assets/logo.svg';
 		opacity: 0.75;
 	}
 
-	/* ── Responsive ── */
 	@media (max-width: 480px) {
 		.login-card {
 			margin: 20px;
