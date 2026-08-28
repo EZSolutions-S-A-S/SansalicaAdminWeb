@@ -1,0 +1,392 @@
+---
+import AdminLayout from '../layouts/AdminLayout.astro';
+import StatCard from '../components/StatCard.astro';
+
+// ── Datos simulados del Dashboard ──────────────────────────────────────────
+const portafolio = {
+	disponibles: 8,
+	total: 10,
+};
+
+const stats = [
+	{ value: 1, label: 'en negociación' },
+	{ value: 1, label: 'cerrados' },
+	{ value: 10, label: 'en portafolio' },
+];
+
+const porCiudad = [
+	{ ciudad: 'Bogotá', count: 1 },
+	{ ciudad: 'Medellín', count: 4 },
+	{ ciudad: 'Cartagena', count: 11 },
+	{ ciudad: 'Armenia', count: 11 },
+];
+
+const porTipo = [
+	{ tipo: 'Apartamento', count: 4 },
+	{ tipo: 'Casa', count: 11 },
+	{ tipo: 'Oficina', count: 8 },
+	{ tipo: 'Finca campestre', count: 6 },
+];
+
+const recientes = [
+	{
+		title: 'Penthouse Panorámico en El Rosales',
+		photo: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=120&q=80',
+	},
+	{
+		title: 'Apartamento Moderno en El Poblado',
+		photo: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=120&q=80',
+	},
+	{
+		title: 'Casa Colonial en Castillogrande',
+		photo: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=120&q=80',
+	},
+	{
+		title: 'Apartamento Ejecutivo en Laureles',
+		photo: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=120&q=80',
+	},
+];
+---
+
+<AdminLayout title="Dashboard - Sansalica">
+	<div class="dashboard">
+
+		<!-- ── Encabezado ─────────────────────────────── -->
+		<header class="dash-header">
+			<span class="dash-subtitle">PANEL GENERAL</span>
+			<h1 class="dash-title">Dashboard</h1>
+		</header>
+
+		<!-- ── Tarjeta portafolio activo ─────────────── -->
+		<div class="portafolio-card">
+			<div class="portafolio-body">
+				<p class="portafolio-label">PORTAFOLIO ACTIVO</p>
+				<p class="portafolio-number">{portafolio.disponibles}</p>
+				<p class="portafolio-desc">
+					inmuebles disponibles de {portafolio.total} totales
+				</p>
+			</div>
+			<div class="portafolio-circle" aria-hidden="true"></div>
+		</div>
+
+		<!-- ── Tarjetas de métricas ───────────────────── -->
+		<div class="stats-grid">
+			<StatCard value={stats[0].value} label={stats[0].label}>
+				<!-- Ícono: reloj / negociación -->
+				<svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+					<circle cx="12" cy="12" r="10"></circle>
+					<polyline points="12 6 12 12 16 14"></polyline>
+				</svg>
+			</StatCard>
+
+			<StatCard value={stats[1].value} label={stats[1].label}>
+				<!-- Ícono: tendencia -->
+				<svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+					<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+					<polyline points="16 7 22 7 22 13"></polyline>
+				</svg>
+			</StatCard>
+
+			<StatCard value={stats[2].value} label={stats[2].label}>
+				<!-- Ícono: portafolio / capas -->
+				<svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+					<line x1="8" y1="6" x2="21" y2="6"></line>
+					<line x1="8" y1="12" x2="21" y2="12"></line>
+					<line x1="8" y1="18" x2="21" y2="18"></line>
+					<line x1="3" y1="6" x2="3.01" y2="6"></line>
+					<line x1="3" y1="12" x2="3.01" y2="12"></line>
+					<line x1="3" y1="18" x2="3.01" y2="18"></line>
+				</svg>
+			</StatCard>
+		</div>
+
+		<!-- ── Fila inferior: ciudad / tipo / recientes ─ -->
+		<div class="info-grid">
+
+			<!-- Por ciudad -->
+			<div class="info-card">
+				<p class="info-card-title">POR CIUDAD</p>
+				<ul class="info-list">
+					{porCiudad.map(({ ciudad, count }) => (
+						<li class="info-row">
+							<span class="info-row-name">{ciudad}</span>
+							<span class="info-row-divider" aria-hidden="true"></span>
+							<span class="info-row-count">{count}</span>
+						</li>
+					))}
+				</ul>
+			</div>
+
+			<!-- Por tipo -->
+			<div class="info-card">
+				<p class="info-card-title">POR TIPO</p>
+				<ul class="info-list">
+					{porTipo.map(({ tipo, count }) => (
+						<li class="info-row">
+							<span class="info-row-name">{tipo}</span>
+							<span class="info-pill">{count}</span>
+						</li>
+					))}
+				</ul>
+			</div>
+
+			<!-- Recientes -->
+			<div class="info-card">
+				<p class="info-card-title">RECIENTES</p>
+				<ul class="recientes-list">
+					{recientes.map(({ title, photo }) => (
+						<li class="reciente-item">
+							<img src={photo} alt={title} class="reciente-img" />
+							<p class="reciente-title">{title}</p>
+						</li>
+					))}
+				</ul>
+			</div>
+
+		</div>
+	</div>
+</AdminLayout>
+
+<style>
+	/* ── Contenedor global ── */
+	.dashboard {
+		display: flex;
+		flex-direction: column;
+		gap: 24px;
+		width: 100%;
+		max-width: 1000px;
+	}
+
+	/* ── Encabezado ── */
+	.dash-header {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+
+	.dash-subtitle {
+		font-family: var(--font-primary);
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 2px;
+		color: #a38c4b;
+		text-transform: uppercase;
+	}
+
+	.dash-title {
+		font-family: var(--font-primary);
+		font-size: 42px;
+		font-weight: 700;
+		color: var(--color-navy);
+		margin: 0;
+		line-height: 1.1;
+	}
+
+	/* ── Portafolio activo ── */
+	.portafolio-card {
+		position: relative;
+		background-color: #e8dfc5;
+		border-radius: 16px;
+		padding: 36px 40px;
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+	}
+
+	.portafolio-body {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		z-index: 1;
+	}
+
+	.portafolio-label {
+		font-family: var(--font-primary);
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 2px;
+		color: var(--color-navy);
+		margin: 0;
+		text-transform: uppercase;
+	}
+
+	.portafolio-number {
+		font-family: var(--font-primary);
+		font-size: 72px;
+		font-weight: 700;
+		color: var(--color-navy);
+		margin: 0;
+		line-height: 1;
+	}
+
+	.portafolio-desc {
+		font-family: var(--font-primary);
+		font-size: 16px;
+		color: var(--color-navy);
+		margin: 0;
+		opacity: 0.85;
+	}
+
+	/* Círculo decorativo */
+	.portafolio-circle {
+		position: absolute;
+		top: -40px;
+		right: -40px;
+		width: 180px;
+		height: 180px;
+		border-radius: 50%;
+		background-color: #c9a84c;
+		opacity: 0.55;
+	}
+
+	/* ── Grid de métricas (3 columnas) ── */
+	.stats-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 20px;
+	}
+
+	/* ── Grid de info inferior (3 columnas) ── */
+	.info-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 20px;
+		align-items: start;
+	}
+
+	/* ── Tarjeta de info genérica ── */
+	.info-card {
+		background-color: var(--color-white);
+		border-radius: 16px;
+		padding: 24px;
+		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+
+	.info-card-title {
+		font-family: var(--font-primary);
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 2px;
+		color: var(--color-navy);
+		margin: 0;
+		text-transform: uppercase;
+	}
+
+	/* ── Lista genérica ── */
+	.info-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+	}
+
+	.info-row {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.info-row-name {
+		font-family: var(--font-primary);
+		font-size: 13px;
+		color: var(--color-navy);
+		white-space: nowrap;
+	}
+
+	.info-row-divider {
+		flex: 1;
+		height: 1px;
+		background-color: var(--color-gray);
+		opacity: 0.4;
+	}
+
+	.info-row-count {
+		font-family: var(--font-primary);
+		font-size: 13px;
+		color: var(--color-navy);
+		font-weight: 600;
+	}
+
+	/* Pill para por tipo */
+	.info-pill {
+		margin-left: auto;
+		background-color: #f1ebd7;
+		color: #a38c4b;
+		font-size: 11px;
+		font-weight: 700;
+		padding: 3px 10px;
+		border-radius: 999px;
+		min-width: 28px;
+		text-align: center;
+	}
+
+	/* ── Recientes ── */
+	.recientes-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	.reciente-item {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+	}
+
+	.reciente-img {
+		width: 52px;
+		height: 40px;
+		object-fit: cover;
+		border-radius: 8px;
+		flex-shrink: 0;
+	}
+
+	.reciente-title {
+		font-family: var(--font-primary);
+		font-size: 12px;
+		color: var(--color-navy);
+		margin: 0;
+		line-height: 1.4;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	/* ── Responsive ── */
+	@media (max-width: 900px) {
+		.stats-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		.info-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 560px) {
+		.stats-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.dash-title {
+			font-size: 32px;
+		}
+
+		.portafolio-number {
+			font-size: 52px;
+		}
+
+		.portafolio-card {
+			padding: 28px 24px;
+		}
+	}
+</style>
