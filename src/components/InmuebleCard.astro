@@ -99,7 +99,7 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 
 <style>
 	.inmueble-card {
-		background: var(--color-white);
+		background: var(--bg-card);
 		border-radius: 12px;
 		display: flex;
 		padding: 12px;
@@ -173,13 +173,13 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 		font-family: var(--font-primary);
 		font-size: 18px;
 		font-weight: 600;
-		color: var(--color-navy);
+		color: var(--text-primary);
 		margin: 0;
 	}
 
 	.location {
 		font-size: 13px;
-		color: var(--color-gray);
+		color: var(--text-secondary);
 		margin: 0;
 		display: flex;
 		align-items: center;
@@ -215,7 +215,7 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 
 	.area {
 		font-size: 12px;
-		color: var(--color-gray);
+		color: var(--text-secondary);
 		margin: 0;
 	}
 
@@ -297,8 +297,8 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 		position: absolute;
 		top: calc(100% + 4px); /* Pushes it down visually */
 		right: 0;
-		background: #fdfcf8; /* Light matching off-white */
-		border: 1px solid #e5dac1; /* Gold subtle border */
+		background: var(--bg-card);
+		border: 1px solid var(--border-color);
 		border-radius: 12px;
 		box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 		display: none;
@@ -332,9 +332,9 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 		text-align: left;
 		font-family: var(--font-primary);
 		font-size: 15px;
-		color: #9ca3af;
+		color: var(--text-secondary);
 		cursor: pointer;
-		border-bottom: 1px solid #e5dac1;
+		border-bottom: 1px solid var(--border-color);
 		transition: background 0.2s, color 0.2s;
 	}
 
@@ -343,12 +343,35 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 	}
 
 	.dropdown-item:hover {
-		background: rgba(229, 218, 193, 0.2);
-		color: var(--color-navy);
+		background: rgba(201, 169, 110, 0.08);
+		color: var(--text-primary);
 	}
 
 	.delete-item:hover {
 		color: #b83a3a;
+	}
+
+	/* Dark mode: soften status pill backgrounds */
+	:global([data-theme='dark']) .status-disponible {
+		background-color: rgba(163, 140, 75, 0.18);
+		color: #c9a96e;
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c9a96e' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+	}
+
+	:global([data-theme='dark']) .status-reservado {
+		background-color: rgba(58, 115, 184, 0.18);
+		color: #7aaee0;
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237aaee0' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+	}
+
+	:global([data-theme='dark']) .status-vendido {
+		background-color: rgba(184, 58, 58, 0.18);
+		color: #d98080;
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d98080' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+	}
+
+	:global([data-theme='dark']) .inmueble-card {
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 	}
 
 	/* Responsive Design */
