@@ -352,19 +352,33 @@ const recientes = [
 
 	@media (max-width: 560px) {
 		.stats-grid {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.dash-title {
+			font-size: 28px;
+		}
+
+		.portafolio-number {
+			font-size: 48px;
+		}
+
+		.portafolio-card {
+			padding: 24px 20px;
+		}
+
+		.info-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 380px) {
+		.stats-grid {
 			grid-template-columns: 1fr;
 		}
 
 		.dash-title {
-			font-size: 32px;
-		}
-
-		.portafolio-number {
-			font-size: 52px;
-		}
-
-		.portafolio-card {
-			padding: 28px 24px;
+			font-size: 22px;
 		}
 	}
 </style>

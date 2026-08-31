@@ -1,7 +1,6 @@
 ---
 const { inmueble } = Astro.props;
 
-// Helper to format price like "$2.9 mil mill." or "$980 M"
 function formatPrice(priceStr: string | number) {
 	const price = typeof priceStr === 'string' ? parseFloat(priceStr) : priceStr;
 	if (isNaN(price)) return priceStr;
@@ -13,7 +12,6 @@ function formatPrice(priceStr: string | number) {
 		const val = price / 1000000;
 		return `$${val % 1 !== 0 ? val.toFixed(1) : val} M`;
 	}
-	// Fallback for smaller values
 	return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(price);
 }
 
@@ -22,11 +20,9 @@ const photoUrl = inmueble.photos && inmueble.photos.length > 0
 	? inmueble.photos[0].url 
 	: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&q=80&w=400';
 
-// 'Venta' or 'Alquiler'/'Renta' (based on operation_type from backend)
 const operation = inmueble.operation_type === 'Venta' ? 'Venta' : 'Renta';
 const badgeClass = operation === 'Venta' ? 'badge-venta' : 'badge-renta';
 
-// Dynamic status class mapping
 const statusMapping: Record<string, string> = {
 	'Disponible': 'status-disponible',
 	'Reservado': 'status-reservado',
@@ -87,7 +83,6 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 </article>
 
 <script>
-	// Handle dynamic color changes on select
 	document.querySelectorAll('.status-select').forEach(select => {
 		select.addEventListener('change', (e) => {
 			const target = e.target as HTMLSelectElement;
@@ -104,7 +99,7 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 		display: flex;
 		padding: 12px;
 		gap: 20px;
-		width: 100%; /* Ensure card takes full width */
+		width: 100%;
 		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 		transition: transform 0.2s ease, box-shadow 0.2s ease;
 		align-items: center;
@@ -115,7 +110,7 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 	.inmueble-card:hover {
 		transform: translateY(-2px);
 		box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
-		z-index: 20; /* Ensures the hovered card and its dropdown overlap cards below */
+		z-index: 20;
 	}
 
 	.image-container {
@@ -146,16 +141,16 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 	}
 
 	.badge-venta {
-		background-color: #a38c4b; /* Gold/Bronze */
+		background-color: #a38c4b;
 	}
 
 	.badge-renta {
-		background-color: var(--color-navy); /* Navy Blue */
+		background-color: var(--color-navy);
 	}
 
 	.details-container {
 		display: flex;
-		flex: 1; /* Grows to fill available space */
+		flex: 1;
 		width: 100%;
 		justify-content: space-between;
 		align-items: center;
@@ -166,7 +161,7 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 		display: flex;
 		flex-direction: column;
 		gap: 6px;
-		flex: 1; /* Pushes the right block to the edge */
+		flex: 1;
 	}
 
 	.title {
@@ -194,7 +189,7 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 	.secondary-info {
 		display: flex;
 		align-items: center;
-		justify-content: flex-end; /* Align right */
+		justify-content: flex-end;
 		gap: 40px;
 	}
 
@@ -209,7 +204,7 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 		font-family: var(--font-primary);
 		font-size: 16px;
 		font-weight: 600;
-		color: #a38c4b; /* Gold/Bronze */
+		color: #a38c4b;
 		margin: 0;
 	}
 
@@ -225,7 +220,6 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 		gap: 12px;
 	}
 
-	/* Dynamic Status Select Pill */
 	.status-select {
 		appearance: none;
 		-webkit-appearance: none;
@@ -295,7 +289,7 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 
 	.dropdown-menu {
 		position: absolute;
-		top: calc(100% + 4px); /* Pushes it down visually */
+		top: calc(100% + 4px);
 		right: 0;
 		background: var(--bg-card);
 		border: 1px solid var(--border-color);
@@ -307,7 +301,6 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 		z-index: 50;
 	}
 
-	/* Creates an invisible bridge to prevent losing the :hover state */
 	.dropdown-menu::before {
 		content: "";
 		position: absolute;
@@ -351,7 +344,6 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 		color: #b83a3a;
 	}
 
-	/* Dark mode: soften status pill backgrounds */
 	:global([data-theme='dark']) .status-disponible {
 		background-color: rgba(163, 140, 75, 0.18);
 		color: #c9a96e;
@@ -374,13 +366,11 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 	}
 
-	/* Responsive Design */
 	@media (max-width: 768px) {
 		.inmueble-card {
 			flex-direction: column;
 			align-items: stretch;
 			padding: 0;
-			/* Removed overflow: hidden so dropdowns aren't clipped on mobile */
 		}
 
 		.image-container {

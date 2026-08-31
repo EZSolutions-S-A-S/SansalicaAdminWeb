@@ -2,14 +2,12 @@
 import AdminLayout from '../layouts/AdminLayout.astro';
 import InmuebleCard from '../components/InmuebleCard.astro';
 
-// This safely accesses the .env variable, falling back if undefined.
 const API_URL = import.meta.env.PUBLIC_API_URL || 'http://127.0.0.1:8000/api/';
 
 let inmuebles = [];
 let error = null;
 
 try {
-	// Try fetching from the Django Backend API
 	const response = await fetch(`${API_URL}inmuebles/`);
 	if (response.ok) {
 		const data = await response.json();
@@ -21,7 +19,6 @@ try {
 	console.error('Error fetching data, falling back to mock data:', e.message);
 	error = e.message;
 	
-	// Mock data corresponding closely to the provided design image
 	inmuebles = [
 		{
 			id: 1,
@@ -39,7 +36,7 @@ try {
 			location: 'Medellín - El Poblado | Apartamento',
 			price: '980000000.00',
 			square_meters: '145.00',
-			operation_type: 'Renta', // Backend uses 'Alquiler', but design says 'Renta'
+			operation_type: 'Renta',
 			status: 'Reservado',
 			photos: [{ url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&q=80' }]
 		},
@@ -159,7 +156,7 @@ try {
 
 	.subtitle {
 		font-family: var(--font-primary);
-		color: #a38c4b; /* Gold/Bronze */
+		color: #a38c4b;
 		font-size: 18px;
 		text-transform: uppercase;
 		letter-spacing: 1px;
@@ -181,7 +178,7 @@ try {
 	}
 
 	.btn-primary {
-		background: #e2d7b5; /* Light gold from design */
+		background: #e2d7b5;
 		color: #8c763c;
 		border: none;
 		padding: 10px 20px;
@@ -197,7 +194,7 @@ try {
 	}
 
 	.count-text {
-		color: var(--text-secondary); /* Updated exactly as requested */
+		color: var(--text-secondary);
 		font-size: 14px;
 		margin-top: 4px;
 	}
@@ -265,7 +262,7 @@ try {
 		background-color: var(--bg-card);
 		font-family: var(--font-primary);
 		font-size: 14px;
-		color: var(--text-secondary); /* Matches placeholder color */
+		color: var(--text-secondary);
 		appearance: none;
 		background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
 		background-repeat: no-repeat;
@@ -284,5 +281,35 @@ try {
 		display: flex;
 		flex-direction: column;
 		gap: 16px;
+	}
+
+	@media (max-width: 768px) {
+		h1 { font-size: 32px; }
+
+		.filters-row {
+			flex-direction: column;
+			gap: 12px;
+		}
+
+		.dropdowns {
+			flex-direction: column;
+			gap: 10px;
+		}
+
+		.filter-select {
+			min-width: 100%;
+			width: 100%;
+		}
+	}
+
+	@media (max-width: 480px) {
+		h1 { font-size: 26px; }
+
+		.title-row { gap: 12px; }
+
+		.btn-primary {
+			padding: 8px 14px;
+			font-size: 13px;
+		}
 	}
 </style>

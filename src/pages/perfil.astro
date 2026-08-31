@@ -227,7 +227,6 @@ const usuario = {
 
 	syncRadios();
 
-	// Sync when sidebar toggle changes data-theme
 	const observer = new MutationObserver(() => syncRadios());
 	observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
@@ -681,7 +680,6 @@ const usuario = {
 		color: #2a3a50;
 	}
 
-	/* Dark mode: soften outer card backgrounds */
 	:global([data-theme='dark']) .theme-opt-oscuro {
 		background-color: #1e2e46;
 	}
@@ -954,36 +952,57 @@ const usuario = {
 		}
 
 		.profile-card {
-			flex-direction: row;
-			text-align: left;
-			align-items: flex-start;
-			flex-wrap: wrap;
+			flex-direction: column;
+			align-items: center;
+			text-align: center;
+		}
+
+		.profile-info {
+			align-items: center;
 		}
 
 		.profile-meta li {
-			justify-content: flex-start;
+			justify-content: center;
 			gap: 16px;
+		}
+
+		.meta-value {
+			text-align: center;
 		}
 	}
 
 	@media (max-width: 560px) {
 		.perfil-title {
-			font-size: 32px;
+			font-size: 28px;
 		}
 
 		.form-row {
 			grid-template-columns: 1fr;
 		}
 
-		.profile-card {
-			flex-direction: column;
-			align-items: center;
-			text-align: center;
-		}
-
 		.seguridad-row {
 			flex-direction: column;
 			align-items: flex-start;
+			gap: 14px;
+		}
+
+		.theme-options {
+			grid-template-columns: 1fr 1fr;
+			gap: 10px;
+		}
+
+		.theme-inner-rect {
+			height: 56px;
+		}
+
+		.section-card {
+			padding: 16px;
+		}
+
+		.dato-row {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 2px;
 		}
 	}
 </style>
