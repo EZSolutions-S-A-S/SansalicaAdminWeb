@@ -62,6 +62,46 @@ try {
 			operation_type: 'Venta',
 			status: 'Vendido',
 			photos: [{ url: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&q=80' }]
+		},
+		{
+			id: 5,
+			title: 'Penthouse Panorámico en El Rosales (Copia)',
+			location: 'Bogotá - El Rosales | Penthouse',
+			price: '2900000000.00',
+			square_meters: '320.00',
+			operation_type: 'Venta',
+			status: 'Disponible',
+			photos: [{ url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&q=80' }]
+		},
+		{
+			id: 6,
+			title: 'Apartamento Moderno en El Poblado (Copia)',
+			location: 'Medellín - El Poblado | Apartamento',
+			price: '980000000.00',
+			square_meters: '145.00',
+			operation_type: 'Renta',
+			status: 'Reservado',
+			photos: [{ url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&q=80' }]
+		},
+		{
+			id: 7,
+			title: 'Casa Colonial en Castillogrande (Copia)',
+			location: 'Cartagena - Castillogrande | Casa',
+			price: '4200000000.00',
+			square_meters: '480.00',
+			operation_type: 'Venta',
+			status: 'Disponible',
+			photos: [{ url: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=400&q=80' }]
+		},
+		{
+			id: 8,
+			title: 'Apartamento Ejecutivo en Laureles (Copia)',
+			location: 'Medellín - Laureles | Apartamento',
+			price: '5000000.00',
+			square_meters: '100.00',
+			operation_type: 'Venta',
+			status: 'Vendido',
+			photos: [{ url: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&q=80' }]
 		}
 	];
 }
@@ -135,7 +175,7 @@ try {
 
 	h1 {
 		font-family: var(--font-primary);
-		color: #1D3872;
+		color: var(--text-primary);
 		font-size: 42px;
 		font-weight: 700;
 	}
@@ -157,7 +197,7 @@ try {
 	}
 
 	.count-text {
-		color: #BEBFBF; /* Updated exactly as requested */
+		color: var(--text-secondary); /* Updated exactly as requested */
 		font-size: 14px;
 		margin-top: 4px;
 	}
@@ -188,16 +228,18 @@ try {
 	.search-icon {
 		position: absolute;
 		left: 14px;
-		color: #b4b4b4;
+		color: var(--text-secondary);
 		font-size: 14px;
 	}
 
 	.search-box input {
 		width: 100%;
 		padding: 12px 14px 12px 40px;
-		border: 1px solid #e0e0e0;
+		border: 1px solid var(--border-color);
 		border-radius: 8px;
-		font-family: var(--font-sans);
+		background-color: var(--bg-card);
+		color: var(--text-primary);
+		font-family: var(--font-primary);
 		font-size: 14px;
 		outline: none;
 		transition: border-color 0.2s;
@@ -208,7 +250,7 @@ try {
 	}
 	
 	.search-box input::placeholder {
-		color: #b4b4b4;
+		color: var(--text-secondary);
 	}
 
 	.dropdowns {
@@ -218,12 +260,12 @@ try {
 
 	.filter-select {
 		padding: 12px 30px 12px 16px;
-		border: 1px solid #e0e0e0;
+		border: 1px solid var(--border-color);
 		border-radius: 8px;
-		background-color: var(--color-white);
-		font-family: var(--font-sans);
+		background-color: var(--bg-card);
+		font-family: var(--font-primary);
 		font-size: 14px;
-		color: var(--color-gray); /* Matches placeholder color */
+		color: var(--text-secondary); /* Matches placeholder color */
 		appearance: none;
 		background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
 		background-repeat: no-repeat;

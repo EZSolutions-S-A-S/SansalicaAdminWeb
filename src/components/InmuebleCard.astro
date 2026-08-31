@@ -64,7 +64,23 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 					<option value="Reservado" selected={inmueble.status === 'Reservado'}>Reservado</option>
 					<option value="Vendido" selected={inmueble.status === 'Vendido'}>Vendido</option>
 				</select>
-				<button class="options-btn" aria-label="Opciones">⋮</button>
+				<div class="options-container">
+					<button class="options-btn" aria-label="Opciones">⋮</button>
+					<div class="dropdown-menu">
+						<button class="dropdown-item">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+							Visualizar
+						</button>
+						<button class="dropdown-item">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+							Editar
+						</button>
+						<button class="dropdown-item delete-item">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+							Eliminar
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -92,11 +108,14 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 		transition: transform 0.2s ease, box-shadow 0.2s ease;
 		align-items: center;
+		position: relative;
+		z-index: 1;
 	}
 
 	.inmueble-card:hover {
 		transform: translateY(-2px);
 		box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+		z-index: 20; /* Ensures the hovered card and its dropdown overlap cards below */
 	}
 
 	.image-container {
@@ -266,13 +285,79 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 		background: rgba(163, 140, 75, 0.1);
 	}
 
+	.options-container {
+		position: relative;
+	}
+
+	.options-container:hover {
+		z-index: 50;
+	}
+
+	.dropdown-menu {
+		position: absolute;
+		top: calc(100% + 4px); /* Pushes it down visually */
+		right: 0;
+		background: #fdfcf8; /* Light matching off-white */
+		border: 1px solid #e5dac1; /* Gold subtle border */
+		border-radius: 12px;
+		box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+		display: none;
+		flex-direction: column;
+		width: 150px;
+		z-index: 50;
+	}
+
+	/* Creates an invisible bridge to prevent losing the :hover state */
+	.dropdown-menu::before {
+		content: "";
+		position: absolute;
+		top: -10px;
+		left: 0;
+		width: 100%;
+		height: 10px;
+	}
+
+	.options-container:hover .dropdown-menu {
+		display: flex;
+	}
+
+	.dropdown-item {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 12px 16px;
+		border: none;
+		background: none;
+		width: 100%;
+		text-align: left;
+		font-family: var(--font-primary);
+		font-size: 15px;
+		color: #9ca3af;
+		cursor: pointer;
+		border-bottom: 1px solid #e5dac1;
+		transition: background 0.2s, color 0.2s;
+	}
+
+	.dropdown-item:last-child {
+		border-bottom: none;
+	}
+
+	.dropdown-item:hover {
+		background: rgba(229, 218, 193, 0.2);
+		color: var(--color-navy);
+	}
+
+	.delete-item:hover {
+		color: #b83a3a;
+	}
+
 	/* Responsive Design */
 	@media (max-width: 768px) {
 		.inmueble-card {
 			flex-direction: column;
 			align-items: stretch;
 			padding: 0;
-			overflow: hidden;
+			/* Removed overflow: hidden so dropdowns aren't clipped on mobile */
 		}
 
 		.image-container {

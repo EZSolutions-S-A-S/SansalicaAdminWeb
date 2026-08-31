@@ -49,4 +49,23 @@
 		background-color: var(--color-light);
 		color: var(--color-navy);
 	}
+
+	/* ── Custom Scrollbar ── */
+	::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background-color: rgba(188, 190, 193, 0.6); /* Subtle gray matching --color-gray */
+		border-radius: 10px;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(27, 42, 74, 0.5); /* Subtle navy on hover */
+	}
 </style>
