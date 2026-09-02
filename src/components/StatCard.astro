@@ -1,0 +1,54 @@
+---
+interface Props {
+	value: number | string;
+	label: string;
+}
+
+const { value, label } = Astro.props;
+---
+
+<div class="stat-card">
+	<div class="stat-icon-wrapper">
+		<slot name="icon" />
+	</div>
+	<p class="stat-value">{value}</p>
+	<p class="stat-label">{label}</p>
+</div>
+
+<style>
+	.stat-card {
+		background-color: rgba(207, 172, 109, 0.14);
+		border-radius: 16px;
+		padding: 28px 24px;
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+
+	.stat-icon-wrapper {
+		width: 44px;
+		height: 44px;
+		background-color: rgba(207, 172, 109, 0.28);
+		border-radius: 10px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--color-gold);
+	}
+
+	.stat-value {
+		font-family: var(--font-primary);
+		font-size: 34px;
+		font-weight: 700;
+		color: var(--color-navy);
+		margin: 0;
+		line-height: 1;
+	}
+
+	.stat-label {
+		font-family: var(--font-primary);
+		font-size: 14px;
+		color: var(--color-gray-mid);
+		margin: 0;
+	}
+</style>

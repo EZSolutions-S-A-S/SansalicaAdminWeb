@@ -4,19 +4,15 @@ import logo from '../assets/logo.svg';
 ---
 
 <div class="login-page">
-	<!-- Fondo con patrón de líneas curvas -->
 	<img class="login-bg" src={bgLogin.src} alt="" aria-hidden="true" />
 
-	<!-- Tarjeta de login -->
 	<div class="login-card">
-		<!-- Logo y nombre -->
 		<div class="login-logo">
 			<img src={logo.src} alt="Logo Sansalica" class="login-logo__img" />
 			<span class="login-logo__brand">Sansalica</span>
 		</div>
 
-		<!-- Formulario -->
-		<form class="login-form" method="post" action="#">
+		<form class="login-form" id="login-form" novalidate>
 			<div class="form-group">
 				<label for="usuario">Usuario</label>
 				<input
@@ -30,21 +26,96 @@ import logo from '../assets/logo.svg';
 
 			<div class="form-group">
 				<label for="contrasena">Contraseña</label>
-				<input
-					type="password"
-					id="contrasena"
-					name="contrasena"
-					autocomplete="current-password"
-				/>
+				<div class="input-wrapper">
+					<input
+						type="password"
+						id="contrasena"
+						name="contrasena"
+						autocomplete="current-password"
+					/>
+					<button type="button" class="eye-btn" id="eye-btn" aria-label="Ver contraseña">
+						<svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+							<circle cx="12" cy="12" r="3"></circle>
+						</svg>
+						<svg id="eye-off-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+							<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+							<line x1="1" y1="1" x2="23" y2="23"></line>
+						</svg>
+					</button>
+				</div>
 			</div>
 
-			<button type="submit" class="btn-ingresar">Ingresar</button>
+			<div class="login-error" id="login-error" hidden>
+				Usuario o contraseña incorrectos.
+			</div>
+
+			<div class="login-success" id="login-success" hidden>
+				Acceso correcto. Redirigiendo…
+			</div>
+
+			<button type="submit" class="btn-ingresar" id="btn-ingresar">Ingresar</button>
 		</form>
 	</div>
 </div>
 
+<script>
+	const USUARIOS: Record<string, string> = {
+		admin: 'admin123',
+		sansalica: 'sansalica2024',
+	};
+
+	const form = document.getElementById('login-form') as HTMLFormElement;
+	const errorEl = document.getElementById('login-error') as HTMLElement;
+	const successEl = document.getElementById('login-success') as HTMLElement;
+	const btnIngresar = document.getElementById('btn-ingresar') as HTMLButtonElement;
+
+	const eyeBtn = document.getElementById('eye-btn') as HTMLButtonElement;
+	const eyeIcon = document.getElementById('eye-icon') as SVGElement;
+	const eyeOffIcon = document.getElementById('eye-off-icon') as SVGElement;
+	const passInput = document.getElementById('contrasena') as HTMLInputElement;
+
+	eyeBtn?.addEventListener('click', () => {
+		const isHidden = passInput.type === 'password';
+		passInput.type = isHidden ? 'text' : 'password';
+		eyeIcon.style.display = isHidden ? 'none' : 'block';
+		eyeOffIcon.style.display = isHidden ? 'block' : 'none';
+	});
+
+	form.addEventListener('submit', (e) => {
+		e.preventDefault();
+		const usuario = (document.getElementById('usuario') as HTMLInputElement).value.trim();
+		const contrasena = (document.getElementById('contrasena') as HTMLInputElement).value;
+
+		errorEl.hidden = true;
+		successEl.hidden = true;
+
+		if (!usuario || !contrasena) {
+			errorEl.textContent = 'Completa todos los campos.';
+			errorEl.hidden = false;
+			return;
+		}
+
+		if (USUARIOS[usuario] && USUARIOS[usuario] === contrasena) {
+			successEl.hidden = false;
+			btnIngresar.disabled = true;
+			btnIngresar.textContent = 'Ingresando…';
+			setTimeout(() => {
+				window.location.href = '/dashboard';
+			}, 1200);
+		} else {
+			errorEl.textContent = 'Usuario o contraseña incorrectos.';
+			errorEl.hidden = false;
+			passInput.value = '';
+			passInput.type = 'password';
+			eyeIcon.style.display = 'block';
+			eyeOffIcon.style.display = 'none';
+			passInput.focus();
+		}
+	});
+</script>
+
 <style>
-	/* ── Página completa ── */
 	.login-page {
 		position: relative;
 		width: 100%;
@@ -55,7 +126,6 @@ import logo from '../assets/logo.svg';
 		overflow: hidden;
 	}
 
-	/* ── Fondo ── */
 	.login-bg {
 		position: fixed;
 		inset: 0;
@@ -65,11 +135,10 @@ import logo from '../assets/logo.svg';
 		z-index: 0;
 	}
 
-	/* ── Tarjeta ── */
 	.login-card {
 		position: relative;
 		z-index: 1;
-		background-color: var(--color-white);
+		background-color: #ffffff;
 		border-radius: 20px;
 		box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
 		padding: 48px 44px 52px;
@@ -81,7 +150,6 @@ import logo from '../assets/logo.svg';
 		gap: 36px;
 	}
 
-	/* ── Logo ── */
 	.login-logo {
 		display: flex;
 		flex-direction: column;
@@ -98,11 +166,10 @@ import logo from '../assets/logo.svg';
 		font-family: var(--font-primary);
 		font-size: 19px;
 		font-weight: 500;
-		color: var(--color-black);
+		color: #1d3872;
 		letter-spacing: 0.06em;
 	}
 
-	/* ── Formulario ── */
 	.login-form {
 		width: 100%;
 		display: flex;
@@ -122,32 +189,78 @@ import logo from '../assets/logo.svg';
 		font-family: var(--font-primary);
 		font-size: 13.5px;
 		font-weight: 400;
-		color: var(--color-black);
+		color: #1d3872;
+	}
+
+	.input-wrapper {
+		position: relative;
+		width: 100%;
 	}
 
 	.form-group input {
 		width: 100%;
 		height: 42px;
-		border: 1.5px solid var(--color-gray);
+		border: 1.5px solid #abb2bb;
 		border-radius: 999px;
-		padding: 0 18px;
+		padding: 0 42px 0 18px;
 		font-family: var(--font-primary);
 		font-size: 14px;
-		color: var(--color-black);
-		background-color: var(--color-white);
+		color: #1d3872;
+		background-color: #ffffff;
 		outline: none;
 		transition: border-color 0.2s ease;
+		box-sizing: border-box;
 	}
 
 	.form-group input:focus {
-		border-color: var(--color-navy);
+		border-color: #1d3872;
 	}
 
-	/* ── Botón ── */
+	.eye-btn {
+		position: absolute;
+		right: 14px;
+		top: 50%;
+		transform: translateY(-50%);
+		background: none;
+		border: none;
+		cursor: pointer;
+		color: #abb2bb;
+		display: flex;
+		align-items: center;
+		padding: 0;
+		transition: color 0.2s;
+	}
+
+	.eye-btn:hover {
+		color: #1d3872;
+	}
+
+	.login-error {
+		width: 100%;
+		background-color: rgba(184, 58, 58, 0.08);
+		color: #b83a3a;
+		font-family: var(--font-primary);
+		font-size: 13px;
+		padding: 10px 14px;
+		border-radius: 10px;
+		text-align: center;
+	}
+
+	.login-success {
+		width: 100%;
+		background-color: rgba(32, 190, 91, 0.1);
+		color: #1a8a46;
+		font-family: var(--font-primary);
+		font-size: 13px;
+		padding: 10px 14px;
+		border-radius: 10px;
+		text-align: center;
+	}
+
 	.btn-ingresar {
 		margin-top: 6px;
-		background-color: var(--color-navy);
-		color: var(--color-white);
+		background-color: #1d3872;
+		color: #ffffff;
 		font-family: var(--font-primary);
 		font-size: 15px;
 		font-weight: 500;
@@ -167,7 +280,11 @@ import logo from '../assets/logo.svg';
 		opacity: 0.75;
 	}
 
-	/* ── Responsive ── */
+	.btn-ingresar:disabled {
+		opacity: 0.6;
+		cursor: default;
+	}
+
 	@media (max-width: 480px) {
 		.login-card {
 			margin: 20px;
