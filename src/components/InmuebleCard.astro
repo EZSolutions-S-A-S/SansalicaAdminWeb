@@ -150,7 +150,7 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 
 	.details-container {
 		display: flex;
-		flex: 1;
+		flex: 1; /* Necesario para que el contenedor ocupe el resto de la tarjeta */
 		width: 100%;
 		justify-content: space-between;
 		align-items: center;
@@ -161,7 +161,7 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 		display: flex;
 		flex-direction: column;
 		gap: 6px;
-		flex: 1;
+		flex: 1; /* Truco clave: Empuja al bloque secundario a la derecha */
 	}
 
 	.title {
@@ -191,13 +191,14 @@ const statusClass = statusMapping[inmueble.status] || 'status-disponible';
 		align-items: center;
 		justify-content: flex-end;
 		gap: 40px;
+		text-align: right; /* Alineación perfecta a la derecha */
 	}
 
 	.metrics {
-		text-align: right;
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
+		align-items: flex-end;
 	}
 
 	.price {
