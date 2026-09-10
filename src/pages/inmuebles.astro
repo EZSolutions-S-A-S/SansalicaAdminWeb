@@ -1,0 +1,463 @@
+---
+import AdminLayout from '../layouts/AdminLayout.astro';
+import InmuebleCard from '../components/InmuebleCard.astro';
+
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://127.0.0.1:8000/api/';
+
+let inmuebles = [];
+let error = null;
+
+try {
+	const response = await fetch(`${API_URL}inmuebles/`);
+	if (response.ok) {
+		const data = await response.json();
+		inmuebles = data.results || [];
+	} else {
+		throw new Error('Failed to fetch from backend');
+	}
+} catch (e) {
+	console.error('Error fetching data, falling back to mock data:', e.message);
+	error = e.message;
+	
+	inmuebles = [
+		{
+			id: 1,
+			title: 'Penthouse Panorámico en El Rosales',
+			location: 'Bogotá - El Rosales | Penthouse',
+			price: '2900000000.00',
+			square_meters: '320.00',
+			operation_type: 'Venta',
+			status: 'Disponible',
+			photos: [{ url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&q=80' }]
+		},
+		{
+			id: 2,
+			title: 'Apartamento Moderno en El Poblado',
+			location: 'Medellín - El Poblado | Apartamento',
+			price: '980000000.00',
+			square_meters: '145.00',
+			operation_type: 'Renta',
+			status: 'Reservado',
+			photos: [{ url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&q=80' }]
+		},
+		{
+			id: 3,
+			title: 'Casa Colonial en Castillogrande',
+			location: 'Cartagena - Castillogrande | Casa',
+			price: '4200000000.00',
+			square_meters: '480.00',
+			operation_type: 'Venta',
+			status: 'Disponible',
+			photos: [{ url: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=400&q=80' }]
+		},
+		{
+			id: 4,
+			title: 'Apartamento Ejecutivo en Laureles',
+			location: 'Medellín - Laureles | Apartamento',
+			price: '5000000.00',
+			square_meters: '100.00',
+			operation_type: 'Venta',
+			status: 'Vendido',
+			photos: [{ url: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&q=80' }]
+		},
+		{
+			id: 5,
+			title: 'Penthouse Panorámico en El Rosales (Copia)',
+			location: 'Bogotá - El Rosales | Penthouse',
+			price: '2900000000.00',
+			square_meters: '320.00',
+			operation_type: 'Venta',
+			status: 'Disponible',
+			photos: [{ url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&q=80' }]
+		},
+		{
+			id: 6,
+			title: 'Apartamento Moderno en El Poblado (Copia)',
+			location: 'Medellín - El Poblado | Apartamento',
+			price: '980000000.00',
+			square_meters: '145.00',
+			operation_type: 'Renta',
+			status: 'Reservado',
+			photos: [{ url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&q=80' }]
+		},
+		{
+			id: 7,
+			title: 'Casa Colonial en Castillogrande (Copia)',
+			location: 'Cartagena - Castillogrande | Casa',
+			price: '4200000000.00',
+			square_meters: '480.00',
+			operation_type: 'Venta',
+			status: 'Disponible',
+			photos: [{ url: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=400&q=80' }]
+		},
+		{
+			id: 8,
+			title: 'Apartamento Ejecutivo en Laureles (Copia)',
+			location: 'Medellín - Laureles | Apartamento',
+			price: '5000000.00',
+			square_meters: '100.00',
+			operation_type: 'Venta',
+			status: 'Vendido',
+			photos: [{ url: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&q=80' }]
+		}
+	];
+}
+---
+
+<AdminLayout title="Inmuebles - Admin Panel">
+	<div class="page-container">
+		<header class="page-header">
+			<span class="subtitle">GESTIÓN</span>
+			<div class="title-row">
+				<h1>Inmuebles</h1>
+				<button class="btn-primary" onclick="window.location.href='/nuevo'">+ Nuevo</button>
+			</div>
+			<p class="count-text">{inmuebles.length} de {inmuebles.length} mostrados</p>
+		</header>
+
+		<div class="filters-row">
+			<div class="search-box">
+				<span class="search-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<circle cx="11" cy="11" r="8"></circle>
+						<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+					</svg>
+				</span>
+				<input type="text" placeholder="Buscar inmueble" />
+			</div>
+			<div class="dropdowns">
+				<select class="filter-select">
+					<option value="">Todas las ciudades</option>
+				</select>
+				<select class="filter-select">
+					<option value="">Todos los estados</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="inmuebles-list">
+			{inmuebles.map((inmueble) => (
+				<InmuebleCard inmueble={inmueble} />
+			))}
+		</div>
+
+		<dialog id="delete-modal" class="delete-modal">
+			<div class="modal-content">
+				<div class="modal-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+				</div>
+				<h2 class="modal-title">Eliminar inmueble</h2>
+				<p class="modal-text">¿Estás seguro de que deseas eliminar este inmueble? Esta acción no se puede deshacer.</p>
+				<div class="modal-actions">
+					<button class="btn-cancel" id="btn-cancel-delete">Cancelar</button>
+					<button class="btn-confirm-delete" id="btn-confirm-delete">Eliminar</button>
+				</div>
+			</div>
+		</dialog>
+	</div>
+</AdminLayout>
+
+<style>
+	.page-container {
+		width: 100%;
+		max-width: 1100px;
+		margin: 0 auto;
+	}
+
+	.page-header {
+		margin-bottom: 24px;
+	}
+
+	.subtitle {
+		font-family: var(--font-primary);
+		color: #a38c4b;
+		font-size: 18px;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		font-weight: 600;
+	}
+
+	.title-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 4px;
+	}
+
+	h1 {
+		font-family: var(--font-primary);
+		color: var(--text-primary);
+		font-size: 42px;
+		font-weight: 700;
+	}
+
+	.btn-primary {
+		background: #e2d7b5;
+		color: #8c763c;
+		border: none;
+		padding: 10px 20px;
+		border-radius: 20px;
+		font-size: 15px;
+		font-weight: 600;
+		cursor: pointer;
+		transition: background 0.2s;
+	}
+
+	.btn-primary:hover {
+		background: #d8cba4;
+	}
+
+	.count-text {
+		color: var(--text-secondary);
+		font-size: 14px;
+		margin-top: 4px;
+	}
+
+	.error-msg {
+		color: #d83333;
+		font-size: 12px;
+		margin-top: 8px;
+		background: rgba(216, 51, 51, 0.1);
+		padding: 4px 8px;
+		display: inline-block;
+		border-radius: 4px;
+	}
+
+	.filters-row {
+		display: flex;
+		gap: 16px;
+		margin-bottom: 30px;
+	}
+
+	.search-box {
+		flex: 1;
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
+
+	.search-icon {
+		position: absolute;
+		left: 14px;
+		color: var(--text-secondary);
+		font-size: 14px;
+	}
+
+	.search-box input {
+		width: 100%;
+		padding: 12px 14px 12px 40px;
+		border: 1px solid var(--border-color);
+		border-radius: 8px;
+		background-color: var(--bg-card);
+		color: var(--text-primary);
+		font-family: var(--font-primary);
+		font-size: 14px;
+		outline: none;
+		transition: border-color 0.2s;
+	}
+
+	.search-box input:focus {
+		border-color: #a38c4b;
+	}
+	
+	.search-box input::placeholder {
+		color: var(--text-secondary);
+	}
+
+	.dropdowns {
+		display: flex;
+		gap: 16px;
+	}
+
+	.filter-select {
+		padding: 12px 30px 12px 16px;
+		border: 1px solid var(--border-color);
+		border-radius: 8px;
+		background-color: var(--bg-card);
+		font-family: var(--font-primary);
+		font-size: 14px;
+		color: var(--text-secondary);
+		appearance: none;
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+		background-repeat: no-repeat;
+		background-position: right 12px center;
+		background-size: 14px;
+		cursor: pointer;
+		outline: none;
+		min-width: 180px;
+	}
+
+	.filter-select:focus {
+		border-color: #a38c4b;
+	}
+
+	.inmuebles-list {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+
+	@media (max-width: 768px) {
+		h1 { font-size: 32px; }
+
+		.filters-row {
+			flex-direction: column;
+			gap: 12px;
+		}
+
+		.dropdowns {
+			flex-direction: column;
+			gap: 10px;
+		}
+
+		.filter-select {
+			min-width: 100%;
+			width: 100%;
+		}
+	}
+
+	@media (max-width: 480px) {
+		h1 { font-size: 26px; }
+
+		.title-row { gap: 12px; }
+
+		.btn-primary {
+			padding: 8px 14px;
+			font-size: 13px;
+		}
+	}
+
+	/* Modal de Confirmación */
+	.delete-modal {
+		background: #1d3872; /* Fondo azul oscuro de la marca */
+		border: none;
+		border-radius: 20px;
+		padding: 36px 32px;
+		width: 90%;
+		max-width: 380px;
+		color: #ffffff;
+		box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+		margin: auto; /* Centrado por defecto en el <dialog> */
+	}
+
+	.delete-modal::backdrop {
+		background: rgba(0, 0, 0, 0.6);
+		backdrop-filter: blur(3px);
+	}
+
+	.modal-content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+
+	.modal-icon {
+		width: 64px;
+		height: 64px;
+		border-radius: 50%;
+		background: rgba(220, 53, 69, 0.15); /* Círculo rojo suave */
+		color: #dc3545; /* Papelera roja */
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 20px;
+	}
+
+	.modal-icon svg {
+		width: 32px;
+		height: 32px;
+	}
+
+	.modal-title {
+		font-family: 'Playfair Display', serif;
+		font-size: 26px;
+		margin: 0 0 12px 0;
+		font-weight: 600;
+	}
+
+	.modal-text {
+		color: #aeb9ce; /* Texto gris claro */
+		font-size: 14.5px;
+		line-height: 1.5;
+		margin: 0 0 32px 0;
+	}
+
+	.modal-actions {
+		display: flex;
+		gap: 14px;
+		width: 100%;
+	}
+
+	.btn-cancel {
+		flex: 1;
+		background: transparent;
+		border: 1px solid #4a5d85;
+		color: #e2e8f0;
+		padding: 12px;
+		border-radius: 999px;
+		font-weight: 600;
+		font-size: 15px;
+		cursor: pointer;
+		transition: background 0.2s, border-color 0.2s;
+	}
+
+	.btn-cancel:hover {
+		background: rgba(255, 255, 255, 0.05);
+		border-color: #6a7c9f;
+	}
+
+	.btn-confirm-delete {
+		flex: 1;
+		background: #dc3545; /* Fondo rojo sólido */
+		border: none;
+		color: #ffffff;
+		padding: 12px;
+		border-radius: 999px;
+		font-weight: 600;
+		font-size: 15px;
+		cursor: pointer;
+		transition: background 0.2s, transform 0.1s;
+	}
+
+	.btn-confirm-delete:hover {
+		background: #c82333;
+	}
+
+	.btn-confirm-delete:active {
+		transform: scale(0.97);
+	}
+</style>
+
+<script>
+	const modal = document.getElementById('delete-modal') as HTMLDialogElement;
+	const btnCancel = document.getElementById('btn-cancel-delete') as HTMLButtonElement;
+	const btnConfirm = document.getElementById('btn-confirm-delete') as HTMLButtonElement;
+	let currentDeleteId: string | null = null;
+
+	// Abrir el modal cuando se hace clic en cualquier botón de 'Eliminar' de las tarjetas
+	document.addEventListener('click', (e) => {
+		const target = (e.target as HTMLElement).closest('.btn-delete-trigger') as HTMLButtonElement;
+		if (target) {
+			currentDeleteId = target.dataset.id || null;
+			modal.showModal();
+		}
+	});
+
+	// Cerrar modal
+	btnCancel?.addEventListener('click', () => {
+		modal.close();
+		currentDeleteId = null;
+	});
+
+	// Confirmar eliminación
+	btnConfirm?.addEventListener('click', () => {
+		if (currentDeleteId) {
+			console.log(`Inmueble [${currentDeleteId}] eliminado`);
+			alert(`Inmueble [${currentDeleteId}] eliminado`);
+			// TODO: Add fetch DELETE here
+		}
+		modal.close();
+		currentDeleteId = null;
+	});
+</script>

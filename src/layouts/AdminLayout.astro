@@ -1,0 +1,179 @@
+---
+import Layout from './Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+
+interface Props {
+	title?: string;
+}
+
+const { title = 'Admin Panel - Sansalica' } = Astro.props;
+---
+
+<Layout>
+	<div class="admin-wrapper">
+
+		<header class="mob-bar" id="mob-bar">
+			<button class="mob-hamburger" id="hamburger" aria-label="Abrir menú">
+				<span></span>
+				<span></span>
+				<span></span>
+			</button>
+			<span class="mob-brand">
+				<img src="/logo.png" class="mob-logo" alt="" aria-hidden="true" />
+				Sansalica
+			</span>
+			<div style="width:40px"></div>
+		</header>
+
+		<div class="mob-overlay" id="mob-overlay"></div>
+
+		<Sidebar />
+
+		<main class="main-content">
+			<slot />
+		</main>
+	</div>
+</Layout>
+
+<script>
+	const hamburger = document.getElementById('hamburger') as HTMLButtonElement;
+	const overlay   = document.getElementById('mob-overlay') as HTMLElement;
+	const sidebar   = document.querySelector('.sidebar') as HTMLElement;
+
+	function openMenu() {
+		sidebar?.classList.add('sidebar-open');
+		overlay?.classList.add('active');
+		document.body.style.overflow = 'hidden';
+	}
+
+	function closeMenu() {
+		sidebar?.classList.remove('sidebar-open');
+		overlay?.classList.remove('active');
+		document.body.style.overflow = '';
+	}
+
+	hamburger?.addEventListener('click', openMenu);
+	overlay?.addEventListener('click', closeMenu);
+
+	document.querySelectorAll('.sidebar a').forEach((link) => {
+		link.addEventListener('click', () => {
+			if (window.innerWidth <= 768) closeMenu();
+		});
+	});
+</script>
+
+<style is:global>
+	.admin-wrapper {
+		display: flex;
+		min-height: 100vh;
+		background-color: var(--bg-page);
+	}
+
+	.main-content {
+		flex: 1;
+		padding: 40px 48px;
+		overflow-y: auto;
+		height: 100vh;
+		min-width: 0;
+	}
+
+	.mob-bar {
+		display: none;
+	}
+
+	.mob-overlay {
+		display: none;
+		position: fixed;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: 99;
+		backdrop-filter: blur(2px);
+	}
+
+	.mob-overlay.active {
+		display: block;
+	}
+
+	@media (max-width: 768px) {
+		.admin-wrapper {
+			flex-direction: column;
+		}
+
+		.main-content {
+			padding: 78px 16px 28px;
+			height: auto;
+			overflow-y: visible;
+		}
+
+		.mob-bar {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0 16px;
+			height: 58px;
+			background-color: var(--color-navy-dark);
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			z-index: 98;
+			box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+			border-bottom: 1.5px solid rgba(201, 169, 110, 0.3);
+		}
+
+		.mob-brand {
+			font-family: var(--font-primary);
+			font-size: 17px;
+			font-weight: 600;
+			color: #ffffff;
+			letter-spacing: 0.07em;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.mob-logo {
+			width: 26px;
+			height: 26px;
+			object-fit: contain;
+			opacity: 0.9;
+		}
+
+		.mob-hamburger {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			gap: 5px;
+			background: rgba(255,255,255,0.07);
+			border: 1px solid rgba(255,255,255,0.12);
+			border-radius: 8px;
+			cursor: pointer;
+			padding: 7px 8px;
+			width: 40px;
+			height: 38px;
+			transition: background 0.2s;
+		}
+
+		.mob-hamburger:hover {
+			background: rgba(255,255,255,0.13);
+		}
+
+		.mob-hamburger span {
+			display: block;
+			width: 20px;
+			height: 2px;
+			background-color: #ffffff;
+			border-radius: 2px;
+		}
+
+		.mob-hamburger span:nth-child(2) {
+			width: 14px;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.main-content {
+			padding: 70px 12px 20px;
+		}
+	}
+</style>

@@ -1,0 +1,400 @@
+---
+const { inmueble } = Astro.props;
+
+function formatPrice(priceStr: string | number) {
+	const price = typeof priceStr === 'string' ? parseFloat(priceStr) : priceStr;
+	if (isNaN(price)) return priceStr;
+
+	if (price >= 1000000000) {
+		const val = price / 1000000000;
+		return `$${val % 1 !== 0 ? val.toFixed(1) : val} mil mill.`;
+	} else if (price >= 1000000) {
+		const val = price / 1000000;
+		return `$${val % 1 !== 0 ? val.toFixed(1) : val} M`;
+	}
+	return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(price);
+}
+
+const formattedPrice = formatPrice(inmueble.price);
+const photoUrl = inmueble.photos && inmueble.photos.length > 0 
+	? inmueble.photos[0].url 
+	: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&q=80&w=400';
+
+const operation = inmueble.operation_type === 'Venta' ? 'Venta' : 'Renta';
+const badgeClass = operation === 'Venta' ? 'badge-venta' : 'badge-renta';
+
+const statusMapping: Record<string, string> = {
+	'Disponible': 'status-disponible',
+	'Reservado': 'status-reservado',
+	'Vendido': 'status-vendido'
+};
+const statusClass = statusMapping[inmueble.status] || 'status-disponible';
+---
+
+<article class="inmueble-card">
+	<div class="image-container">
+		<img src={photoUrl} alt={inmueble.title} class="thumbnail" />
+		<span class={`operation-badge ${badgeClass}`}>{operation}</span>
+	</div>
+
+	<div class="details-container">
+		<div class="primary-info">
+			<h3 class="title">{inmueble.title}</h3>
+			<p class="location">
+				<span class="icon">
+					<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+				</span> 
+				{inmueble.location}
+			</p>
+		</div>
+
+		<div class="secondary-info">
+			<div class="metrics">
+				<p class="price">{formattedPrice}</p>
+				<p class="area">{Math.round(inmueble.square_meters)} m²</p>
+			</div>
+
+			<div class="actions">
+				<select class={`status-select ${statusClass}`}>
+					<option value="Disponible" selected={inmueble.status === 'Disponible'}>Disponible</option>
+					<option value="Reservado" selected={inmueble.status === 'Reservado'}>Reservado</option>
+					<option value="Vendido" selected={inmueble.status === 'Vendido'}>Vendido</option>
+				</select>
+				<div class="options-container">
+					<button class="options-btn" aria-label="Opciones">⋮</button>
+					<div class="dropdown-menu">
+						<button class="dropdown-item">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+							Visualizar
+						</button>
+						<button class="dropdown-item">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+							Editar
+						</button>
+						<button class="dropdown-item delete-item btn-delete-trigger" data-id={inmueble.id}>
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+							Eliminar
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</article>
+
+<script>
+	document.querySelectorAll('.status-select').forEach(select => {
+		select.addEventListener('change', (e) => {
+			const target = e.target as HTMLSelectElement;
+			target.classList.remove('status-disponible', 'status-reservado', 'status-vendido');
+			target.classList.add(`status-${target.value.toLowerCase()}`);
+		});
+	});
+</script>
+
+<style>
+	.inmueble-card {
+		background: var(--bg-card);
+		border-radius: 12px;
+		display: flex;
+		padding: 12px;
+		gap: 20px;
+		width: 100%;
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+		transition: transform 0.2s ease, box-shadow 0.2s ease;
+		align-items: center;
+		position: relative;
+		z-index: 1;
+	}
+
+	.inmueble-card:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+		z-index: 20;
+	}
+
+	.image-container {
+		position: relative;
+		width: 160px;
+		height: 100px;
+		flex-shrink: 0;
+		border-radius: 8px;
+		overflow: hidden;
+	}
+
+	.thumbnail {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.operation-badge {
+		position: absolute;
+		bottom: 8px;
+		right: 8px;
+		padding: 4px 12px;
+		border-radius: 12px;
+		font-size: 11px;
+		font-weight: 600;
+		color: var(--color-white);
+		letter-spacing: 0.5px;
+	}
+
+	.badge-venta {
+		background-color: #a38c4b;
+	}
+
+	.badge-renta {
+		background-color: var(--color-navy);
+	}
+
+	.details-container {
+		display: flex;
+		flex: 1; /* Necesario para que el contenedor ocupe el resto de la tarjeta */
+		width: 100%;
+		justify-content: space-between;
+		align-items: center;
+		min-width: 0;
+	}
+
+	.primary-info {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		flex: 1; /* Truco clave: Empuja al bloque secundario a la derecha */
+	}
+
+	.title {
+		font-family: var(--font-primary);
+		font-size: 18px;
+		font-weight: 600;
+		color: var(--text-primary);
+		margin: 0;
+	}
+
+	.location {
+		font-size: 13px;
+		color: var(--text-secondary);
+		margin: 0;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+	
+	.location .icon {
+		display: flex;
+		align-items: center;
+	}
+
+	.secondary-info {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: 40px;
+		text-align: right; /* Alineación perfecta a la derecha */
+	}
+
+	.metrics {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		align-items: flex-end;
+	}
+
+	.price {
+		font-family: var(--font-primary);
+		font-size: 16px;
+		font-weight: 600;
+		color: #a38c4b;
+		margin: 0;
+	}
+
+	.area {
+		font-size: 12px;
+		color: var(--text-secondary);
+		margin: 0;
+	}
+
+	.actions {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+	}
+
+	.status-select {
+		appearance: none;
+		-webkit-appearance: none;
+		border: none;
+		border-radius: 16px;
+		padding: 6px 24px 6px 12px;
+		font-size: 12px;
+		font-weight: 500;
+		width: 105px;
+		cursor: pointer;
+		outline: none;
+		font-family: inherit;
+		background-repeat: no-repeat;
+		background-position: right 10px center;
+		background-size: 8px;
+		transition: filter 0.2s;
+	}
+
+	.status-select:hover {
+		filter: brightness(0.95);
+	}
+
+	.status-disponible {
+		background-color: #f1ebd7;
+		color: #a38c4b;
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a38c4b' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+	}
+
+	.status-reservado {
+		background-color: #e6f0fd;
+		color: #3a73b8;
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a73b8' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+	}
+
+	.status-vendido {
+		background-color: #fde6e6;
+		color: #b83a3a;
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b83a3a' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+	}
+
+	.options-btn {
+		background: none;
+		border: none;
+		color: #a38c4b;
+		font-size: 20px;
+		cursor: pointer;
+		padding: 4px;
+		line-height: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		transition: background 0.2s;
+	}
+
+	.options-btn:hover {
+		background: rgba(163, 140, 75, 0.1);
+	}
+
+	.options-container {
+		position: relative;
+	}
+
+	.options-container:hover {
+		z-index: 50;
+	}
+
+	.dropdown-menu {
+		position: absolute;
+		top: calc(100% + 4px);
+		right: 0;
+		background: var(--bg-card);
+		border: 1px solid var(--border-color);
+		border-radius: 12px;
+		box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+		display: none;
+		flex-direction: column;
+		width: 150px;
+		z-index: 50;
+	}
+
+	.dropdown-menu::before {
+		content: "";
+		position: absolute;
+		top: -10px;
+		left: 0;
+		width: 100%;
+		height: 10px;
+	}
+
+	.options-container:hover .dropdown-menu {
+		display: flex;
+	}
+
+	.dropdown-item {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 12px 16px;
+		border: none;
+		background: none;
+		width: 100%;
+		text-align: left;
+		font-family: var(--font-primary);
+		font-size: 15px;
+		color: var(--text-secondary);
+		cursor: pointer;
+		border-bottom: 1px solid var(--border-color);
+		transition: background 0.2s, color 0.2s;
+	}
+
+	.dropdown-item:last-child {
+		border-bottom: none;
+	}
+
+	.dropdown-item:hover {
+		background: rgba(201, 169, 110, 0.08);
+		color: var(--text-primary);
+	}
+
+	.delete-item:hover {
+		color: #b83a3a;
+	}
+
+	:global([data-theme='dark']) .status-disponible {
+		background-color: rgba(163, 140, 75, 0.18);
+		color: #c9a96e;
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c9a96e' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+	}
+
+	:global([data-theme='dark']) .status-reservado {
+		background-color: rgba(58, 115, 184, 0.18);
+		color: #7aaee0;
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237aaee0' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+	}
+
+	:global([data-theme='dark']) .status-vendido {
+		background-color: rgba(184, 58, 58, 0.18);
+		color: #d98080;
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d98080' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+	}
+
+	:global([data-theme='dark']) .inmueble-card {
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+	}
+
+	@media (max-width: 768px) {
+		.inmueble-card {
+			flex-direction: column;
+			align-items: stretch;
+			padding: 0;
+		}
+
+		.image-container {
+			width: 100%;
+			height: 180px;
+			border-radius: 12px 12px 0 0;
+		}
+
+		.details-container {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 16px;
+			padding: 16px;
+		}
+
+		.secondary-info {
+			width: 100%;
+			justify-content: space-between;
+			gap: 16px;
+		}
+
+		.metrics {
+			text-align: left;
+		}
+	}
+</style>
