@@ -9,7 +9,6 @@ import logo from '../assets/logo.svg';
 	<div class="login-card">
 		<div class="login-logo">
 			<img src={logo.src} alt="Logo Sansalica" class="login-logo__img" />
-			<span class="login-logo__brand">Sansalica</span>
 		</div>
 
 		<form class="login-form" id="login-form" novalidate>
@@ -158,8 +157,9 @@ import logo from '../assets/logo.svg';
 	}
 
 	.login-logo__img {
-		width: 44px;
+		width: 140px; /* Aumentado drásticamente para que se lea el texto del logo SVG */
 		height: auto;
+		margin-bottom: 8px; /* Dar un pequeño respiro hacia abajo */
 	}
 
 	.login-logo__brand {
@@ -187,9 +187,9 @@ import logo from '../assets/logo.svg';
 
 	.form-group label {
 		font-family: var(--font-primary);
-		font-size: 13.5px;
-		font-weight: 400;
-		color: #1d3872;
+		font-size: 15px;
+		font-weight: 700;
+		color: #000000;
 	}
 
 	.input-wrapper {
@@ -200,7 +200,7 @@ import logo from '../assets/logo.svg';
 	.form-group input {
 		width: 100%;
 		height: 42px;
-		border: 1.5px solid #abb2bb;
+		border: 1px solid #3c527e; /* Borde azul oscuro como en el mockup */
 		border-radius: 999px;
 		padding: 0 42px 0 18px;
 		font-family: var(--font-primary);
@@ -208,12 +208,13 @@ import logo from '../assets/logo.svg';
 		color: #1d3872;
 		background-color: #ffffff;
 		outline: none;
-		transition: border-color 0.2s ease;
+		transition: border-color 0.2s ease, box-shadow 0.2s ease;
 		box-sizing: border-box;
 	}
 
 	.form-group input:focus {
 		border-color: #1d3872;
+		box-shadow: 0 0 0 3px rgba(29, 56, 114, 0.1);
 	}
 
 	.eye-btn {
@@ -224,7 +225,7 @@ import logo from '../assets/logo.svg';
 		background: none;
 		border: none;
 		cursor: pointer;
-		color: #abb2bb;
+		color: #3c527e;
 		display: flex;
 		align-items: center;
 		padding: 0;
@@ -259,17 +260,18 @@ import logo from '../assets/logo.svg';
 
 	.btn-ingresar {
 		margin-top: 6px;
-		background-color: #1d3872;
+		background-color: #3c527e; /* Color del mockup */
 		color: #ffffff;
 		font-family: var(--font-primary);
-		font-size: 15px;
-		font-weight: 500;
+		font-size: 16px;
+		font-weight: 600;
 		letter-spacing: 0.02em;
 		border: none;
 		border-radius: 999px;
 		padding: 10px 44px;
 		cursor: pointer;
-		transition: opacity 0.2s ease;
+		transition: opacity 0.2s ease, transform 0.2s ease;
+		box-shadow: 0 4px 12px rgba(60, 82, 126, 0.3);
 	}
 
 	.btn-ingresar:hover {

@@ -142,7 +142,8 @@ const recientes = [
 		flex-direction: column;
 		gap: 24px;
 		width: 100%;
-		max-width: 1000px;
+		max-width: 1100px;
+		margin: 0 auto;
 	}
 
 	.dash-header {
@@ -234,7 +235,7 @@ const recientes = [
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		gap: 20px;
-		align-items: start;
+		align-items: stretch; /* Esto forzará a que todas las tarjetas compartan la misma altura */
 	}
 
 	.info-card {
@@ -263,7 +264,9 @@ const recientes = [
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 14px;
+		gap: 22px; /* Espaciado generoso pero fijo, respeta la Ley de Proximidad */
+		flex: 1;
+		justify-content: center; /* Centra el bloque entero en lugar de dispersarlo */
 	}
 
 	.info-row {
@@ -282,27 +285,32 @@ const recientes = [
 	.info-row-divider {
 		flex: 1;
 		height: 1px;
-		background-color: var(--color-gold-light);
+		border-bottom: 1px solid var(--color-gold);
 		opacity: 0.5;
+		margin: 0 12px;
 	}
 
 	.info-row-count {
 		font-family: var(--font-primary);
-		font-size: 13px;
+		font-size: 16px; /* Aumentado para mayor jerarquía visual */
 		color: var(--color-navy);
-		font-weight: 600;
+		font-weight: 700;
 	}
 
 	.info-pill {
 		margin-left: auto;
 		background-color: rgba(207, 172, 109, 0.2);
 		color: var(--color-gold);
-		font-size: 11px;
+		font-size: 14px; /* Tamaño de número más grande */
 		font-weight: 700;
-		padding: 3px 10px;
 		border-radius: 999px;
-		min-width: 28px;
-		text-align: center;
+		width: 40px; /* Ancho fijo para que todas sean idénticas */
+		height: 28px; /* Alto fijo */
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		line-height: 1; /* Truco de tipografía para centrado óptico perfecto */
+		padding: 0; /* Resetear cualquier padding nativo */
 	}
 
 	.recientes-list {
@@ -311,7 +319,9 @@ const recientes = [
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 12px;
+		gap: 16px;
+		flex: 1;
+		justify-content: center;
 	}
 
 	.reciente-item {
