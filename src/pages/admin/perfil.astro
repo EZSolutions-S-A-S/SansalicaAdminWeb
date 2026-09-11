@@ -1,0 +1,27 @@
+---
+import AdminLayout from '@/layouts/AdminLayout.astro';
+import { ProfilePanel } from '@/components/profile/ProfilePanel';
+import * as authRepository from '@/repositories/authRepository';
+import { withAuthRetry, UnauthorizedError } from '@/repositories/withAuthRetry';
+
+let profile;
+try {
+  profile = await withAuthRetry(Astro.cookies, (token) => authRepository.getProfile(token));
+} catch (error) {
+  if (error instanceof UnauthorizedError) {
+    return Astro.redirect('/login');
+  }
+  throw error;
+}
+---
+
+<AdminLayout title="Perfil">
+  <div class="dashboard">
+    <header class="page-header">
+      <span class="subtitle">MI CUENTA</span>
+      <h1>Perfil &amp; Configuración</h1>
+    </header>
+
+    <ProfilePanel profile={profile} client:load />
+  </div>
+</AdminLayout>
