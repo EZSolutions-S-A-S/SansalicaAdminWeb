@@ -3,6 +3,7 @@ import { InmuebleForm } from '@/components/inmuebles/InmuebleForm';
 import { Modal } from '@/components/ui/Modal';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { ErrorBanner } from '@/components/ui/ErrorBanner';
+import { Lightbox } from '@/components/ui/Lightbox';
 import * as inmueblesService from '@/services/http/inmueblesService';
 import type { Inmueble, InmuebleStatus } from '@/types/inmueble';
 
@@ -33,6 +34,7 @@ export function InmuebleDetailClient({ inmueble: initial }: { inmueble: Inmueble
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [activePhotoIndex, setActivePhotoIndex] = useState(0);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   const operationLabel = inmueble.operation_type === 'Venta' ? 'Venta' : 'Renta';
   const badgeClass = inmueble.operation_type === 'Venta' ? 'badge-venta' : 'badge-renta';
@@ -106,7 +108,11 @@ export function InmuebleDetailClient({ inmueble: initial }: { inmueble: Inmueble
       {photos.length > 0 ? (
         <div className="detail-gallery">
           <div className="detail-gallery-main">
-            <img src={photos[safePhotoIndex].url ?? ''} alt={inmueble.title} />
+            <img
+              src={photos[safePhotoIndex].url ?? ''}
+              alt={inmueble.title}
+              onClick={() => setIsLightboxOpen(true)}
+            />
             {photos.length > 1 && (
               <>
                 <button type="button" className="gallery-nav-btn gallery-nav-prev" onClick={showPrevPhoto} aria-label="Foto anterior">
@@ -251,6 +257,15 @@ export function InmuebleDetailClient({ inmueble: initial }: { inmueble: Inmueble
           </div>
         </div>
       </div>
+
+      {isLightboxOpen && (
+        <Lightbox
+          images={photos.map((photo) => ({ url: photo.url ?? '', alt: inmueble.title }))}
+          index={safePhotoIndex}
+          onIndexChange={setActivePhotoIndex}
+          onClose={() => setIsLightboxOpen(false)}
+        />
+      )}
 
       {isEditing && (
         <Modal title={`Editar: ${inmueble.title}`} onClose={() => setIsEditing(false)}>
