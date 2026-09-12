@@ -3,10 +3,11 @@ import * as inmueblesService from '@/services/http/inmueblesService';
 import { ClientApiError } from '@/services/http/httpClient';
 import { mapFieldErrors } from '@/services/http/errorMapping';
 import { ErrorBanner } from '@/components/ui/ErrorBanner';
+import { Lightbox } from '@/components/ui/Lightbox';
 import type { Inmueble, InmuebleInput, OperationType, PropertyType, InmuebleStatus } from '@/types/inmueble';
 
 const OPERATION_TYPES: OperationType[] = ['Venta', 'Alquiler'];
-const PROPERTY_TYPES: PropertyType[] = ['Casa', 'Apartamento', 'Local Comercial', 'Terreno'];
+const PROPERTY_TYPES: PropertyType[] = ['Casa', 'Apartamento', 'Local Comercial', 'Terreno', 'Finca'];
 const STATUSES: InmuebleStatus[] = ['Disponible', 'Reservado', 'Vendido'];
 
 const FEATURES_OPTIONS = [
@@ -114,6 +115,7 @@ export function InmuebleForm({ inmueble, onCreated, onUpdated, onCancel }: Inmue
   const [formError, setFormError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [photoFiles, setPhotoFiles] = useState<File[]>([]);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [uploadProgress, setUploadProgress] = useState<{ current: number; total: number } | null>(null);
   const [uploadSummary, setUploadSummary] = useState<string | null>(null);
 
@@ -367,8 +369,8 @@ export function InmuebleForm({ inmueble, onCreated, onUpdated, onCancel }: Inmue
                   type="number"
                   min="0"
                   step="0.01"
-                  value={form.square_meters}
-                  onChange={(e) => update('square_meters', Number(e.target.value))}
+                  value={form.square_meters === 0 ? '' : form.square_meters}
+                  onChange={(e) => update('square_meters', e.target.value === '' ? 0 : Number(e.target.value))}
                   required
                 />
                 {fieldErrors.square_meters && <span className="field-error">{fieldErrors.square_meters}</span>}
@@ -434,9 +436,16 @@ export function InmuebleForm({ inmueble, onCreated, onUpdated, onCancel }: Inmue
             <>
               {photos.length > 0 && (
                 <ul className="photo-thumb-list">
-                  {photos.map((photo) => (
+                  {photos.map((photo, index) => (
                     <li key={photo.id}>
-                      {photo.url && <img src={photo.url} alt="" />}
+                      {photo.url && (
+                        <img
+                          src={photo.url}
+                          alt=""
+                          style={{ cursor: 'zoom-in' }}
+                          onClick={() => setLightboxIndex(index)}
+                        />
+                      )}
                       <button
                         type="button"
                         className="photo-thumb-remove"
@@ -530,6 +539,15 @@ export function InmuebleForm({ inmueble, onCreated, onUpdated, onCancel }: Inmue
           </>
         )}
       </div>
+
+      {lightboxIndex !== null && (
+        <Lightbox
+          images={photos.map((photo) => ({ url: photo.url ?? '' }))}
+          index={lightboxIndex}
+          onIndexChange={setLightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
+      )}
     </form>
   );
 }

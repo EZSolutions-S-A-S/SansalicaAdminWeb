@@ -4,7 +4,7 @@ import * as inmuebleRepository from '@/repositories/inmuebleRepository';
 import { withAuthRetry, UnauthorizedError } from '@/repositories/withAuthRetry';
 import type { Inmueble, PropertyType } from '@/types/inmueble';
 
-const PROPERTY_TYPES: PropertyType[] = ['Casa', 'Apartamento', 'Local Comercial', 'Terreno'];
+const PROPERTY_TYPES: PropertyType[] = ['Casa', 'Apartamento', 'Local Comercial', 'Terreno', 'Finca'];
 
 let total = 0;
 let disponibles = 0;

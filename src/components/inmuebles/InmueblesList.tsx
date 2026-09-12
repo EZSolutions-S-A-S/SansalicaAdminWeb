@@ -6,7 +6,7 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import type { Inmueble, InmuebleListParams, InmuebleStatus, PropertyType } from '@/types/inmueble';
 import type { PaginatedResponse } from '@/types/api';
 
-const PROPERTY_TYPES: PropertyType[] = ['Casa', 'Apartamento', 'Local Comercial', 'Terreno'];
+const PROPERTY_TYPES: PropertyType[] = ['Casa', 'Apartamento', 'Local Comercial', 'Terreno', 'Finca'];
 const STATUSES: InmuebleStatus[] = ['Disponible', 'Reservado', 'Vendido'];
 const SEARCH_DEBOUNCE_MS = 350;
 

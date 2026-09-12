@@ -1,6 +1,6 @@
 export type OperationType = 'Venta' | 'Alquiler';
 
-export type PropertyType = 'Casa' | 'Apartamento' | 'Local Comercial' | 'Terreno';
+export type PropertyType = 'Casa' | 'Apartamento' | 'Local Comercial' | 'Terreno' | 'Finca';
 
 export type InmuebleStatus = 'Disponible' | 'Reservado' | 'Vendido';
 
