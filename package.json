@@ -12,9 +12,19 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.2.6"
+    "@astrojs/netlify": "^8.2.5",
+    "@astrojs/react": "^6.0.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "astro": "^7.2.6",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
   },
   "allowScripts": {
     "esbuild": true
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^6.0.3"
   }
 }

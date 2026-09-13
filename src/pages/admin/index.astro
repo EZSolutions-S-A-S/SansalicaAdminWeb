@@ -1,0 +1,160 @@
+---
+import AdminLayout from '@/layouts/AdminLayout.astro';
+import * as inmuebleRepository from '@/repositories/inmuebleRepository';
+import { withAuthRetry, UnauthorizedError } from '@/repositories/withAuthRetry';
+import type { Inmueble, PropertyType } from '@/types/inmueble';
+
+const PROPERTY_TYPES: PropertyType[] = ['Casa', 'Apartamento', 'Local Comercial', 'Terreno', 'Finca'];
+
+let total = 0;
+let disponibles = 0;
+let reservados = 0;
+let vendidos = 0;
+let venta = 0;
+let alquiler = 0;
+let porTipoCounts: number[] = PROPERTY_TYPES.map(() => 0);
+let recientes: Inmueble[] = [];
+
+try {
+  // A single page_size:1 request only needs the count DRF already computes —
+  // exact per-bucket totals without pulling every record (see #3 in the plan:
+  // the old page_size:200 approach under-counted past 200 inmuebles).
+  const result = await withAuthRetry(Astro.cookies, async (token) => {
+    const [recent, disp, res, ven, venta_, alquiler_, ...porTipo] = await Promise.all([
+      inmuebleRepository.list(token, { page_size: 4, ordering: '-created_at' }),
+      inmuebleRepository.list(token, { status: 'Disponible', page_size: 1 }),
+      inmuebleRepository.list(token, { status: 'Reservado', page_size: 1 }),
+      inmuebleRepository.list(token, { status: 'Vendido', page_size: 1 }),
+      inmuebleRepository.list(token, { operation_type: 'Venta', page_size: 1 }),
+      inmuebleRepository.list(token, { operation_type: 'Alquiler', page_size: 1 }),
+      ...PROPERTY_TYPES.map((tipo) => inmuebleRepository.list(token, { property_type: tipo, page_size: 1 })),
+    ]);
+    return {
+      recent,
+      disponibles: disp.count,
+      reservados: res.count,
+      vendidos: ven.count,
+      venta: venta_.count,
+      alquiler: alquiler_.count,
+      porTipoCounts: porTipo.map((p) => p.count),
+    };
+  });
+
+  total = result.recent.count;
+  recientes = result.recent.results;
+  disponibles = result.disponibles;
+  reservados = result.reservados;
+  vendidos = result.vendidos;
+  venta = result.venta;
+  alquiler = result.alquiler;
+  porTipoCounts = result.porTipoCounts;
+} catch (error) {
+  if (error instanceof UnauthorizedError) {
+    return Astro.redirect('/login');
+  }
+  // Any other error: show the dashboard with zeroed-out stats rather than a 500.
+}
+
+const porOperacion = [
+  { label: 'Venta', count: venta },
+  { label: 'Renta', count: alquiler },
+];
+
+const porTipo = PROPERTY_TYPES.map((tipo, i) => ({ tipo, count: porTipoCounts[i] }));
+---
+
+<AdminLayout title="Dashboard">
+  <div class="dashboard">
+    <header class="page-header">
+      <span class="subtitle">PANEL GENERAL</span>
+      <h1>Dashboard</h1>
+    </header>
+
+    <div class="portafolio-card">
+      <div class="portafolio-body">
+        <p class="portafolio-label">PORTAFOLIO ACTIVO</p>
+        <p class="portafolio-number">{disponibles}</p>
+        <p class="portafolio-desc">inmuebles disponibles de {total} totales</p>
+      </div>
+      <div class="portafolio-circle" aria-hidden="true"></div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </div>
+        <p class="stat-value">{reservados}</p>
+        <p class="stat-label">en negociación</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+        </div>
+        <p class="stat-value">{vendidos}</p>
+        <p class="stat-label">cerrados</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+        </div>
+        <p class="stat-value">{total}</p>
+        <p class="stat-label">en portafolio</p>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <p class="info-card-title">POR OPERACIÓN</p>
+        <ul class="info-list">
+          {porOperacion.map(({ label, count }) => (
+            <li class="info-row">
+              <span class="info-row-name">{label}</span>
+              <span class="info-row-divider" aria-hidden="true"></span>
+              <span class="info-row-count">{count}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <p class="info-card-title">POR TIPO</p>
+        <ul class="info-list">
+          {porTipo.map(({ tipo, count }) => (
+            <li class="info-row">
+              <span class="info-row-name">{tipo}</span>
+              <span class="info-pill">{count}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <p class="info-card-title">RECIENTES</p>
+        {recientes.length === 0 && <p class="stat-label">Todavía no hay inmuebles cargados.</p>}
+        <ul class="recientes-list">
+          {recientes.map((inmueble) => (
+            <li>
+              <a class="reciente-item" href={`/admin/inmuebles/${inmueble.id}`}>
+                {inmueble.photos[0]?.url && <img src={inmueble.photos[0].url} alt="" class="reciente-img" />}
+                {!inmueble.photos[0]?.url && <div class="reciente-img" aria-hidden="true"></div>}
+                <p class="reciente-title">{inmueble.title}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</AdminLayout>
+
+<style>
+  .dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+</style>

@@ -1,0 +1,77 @@
+/* Tokens del panel Sansalica — copiados del diseño de referencia
+   (SansalicaAdminWeb) para mantener paridad visual exacta. */
+
+:root {
+  --color-navy: #1d3872;
+  --color-navy-dark: #1b2a4a;
+  --color-navy-mid: #2f4167;
+  --color-gold: #c9a96e;
+  --color-gold-light: #cfac6d;
+  --color-gold-deep: #a38c4b;
+  --color-white: #ffffff;
+  --color-gray: #abb2bb;
+  --color-gray-blue: #b0bac5;
+  --color-gray-mid: #61758a;
+  --color-light: #f4f1e8;
+  --color-success: #20be5b;
+  --font-primary: 'Playfair Display', serif;
+
+  --bg-page: #f4f1e8;
+  --bg-card: #ffffff;
+  --text-primary: #1d3872;
+  --text-secondary: #61758a;
+  --border-color: #e4e0d5;
+
+  --status-disponible-bg: #f1ebd7;
+  --status-disponible-text: #a38c4b;
+  --status-reservado-bg: #e6f0fd;
+  --status-reservado-text: #3a73b8;
+  --status-vendido-bg: #fde6e6;
+  --status-vendido-text: #b83a3a;
+
+  --badge-venta-bg: #a38c4b;
+  --badge-renta-bg: var(--color-navy);
+
+  --error: #b83a3a;
+  --error-bg: rgba(184, 58, 58, 0.08);
+  --success-bg: rgba(32, 190, 91, 0.1);
+  --success-text: #1a8a46;
+}
+
+[data-theme='dark'] {
+  --bg-page: #0d1524;
+  --bg-card: #162035;
+  --text-primary: #e8edf8;
+  --text-secondary: #8fa3bb;
+  --border-color: #243050;
+  --color-gray: #3a4a60;
+  --color-light: #0d1524;
+  --color-white: #162035;
+  --color-navy: #e8edf8;
+  --color-gray-mid: #8fa3bb;
+  --color-navy-dark: #081020;
+
+  --status-disponible-bg: rgba(163, 140, 75, 0.18);
+  --status-disponible-text: #c9a96e;
+  --status-reservado-bg: rgba(58, 115, 184, 0.18);
+  --status-reservado-text: #7aaee0;
+  --status-vendido-bg: rgba(184, 58, 58, 0.18);
+  --status-vendido-text: #d98080;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-family: var(--font-primary);
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}

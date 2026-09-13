@@ -1,0 +1,24 @@
+---
+import AdminLayout from '@/layouts/AdminLayout.astro';
+import { InmueblesPageClient } from '@/components/inmuebles/InmueblesPageClient';
+import * as inmuebleRepository from '@/repositories/inmuebleRepository';
+import { withAuthRetry, UnauthorizedError } from '@/repositories/withAuthRetry';
+
+let initialData = null;
+try {
+  initialData = await withAuthRetry(Astro.cookies, (token) =>
+    inmuebleRepository.list(token, { page: 1, page_size: 20 })
+  );
+} catch (error) {
+  if (error instanceof UnauthorizedError) {
+    return Astro.redirect('/login');
+  }
+  // Any other error: let the client-side fetch retry and show its own error state.
+}
+---
+
+<AdminLayout title="Inmuebles">
+  <div class="page-container">
+    <InmueblesPageClient initialData={initialData} client:load />
+  </div>
+</AdminLayout>
