@@ -4,6 +4,8 @@ import '@/styles/admin.css';
 import { LoginForm } from '@/components/auth/LoginForm';
 import bgLogin from '@/assets/bg-login.svg';
 import logo from '@/assets/logo.svg';
+
+const expired = Astro.url.searchParams.get('expired') === '1';
 ---
 
 <html lang="es">
@@ -27,7 +29,7 @@ import logo from '@/assets/logo.svg';
           <img src={logo.src} alt="Logo Sansalica" class="login-logo__img" />
         </div>
 
-        <LoginForm client:load />
+        <LoginForm expired={expired} client:load />
       </div>
     </div>
   </body>
