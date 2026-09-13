@@ -2,14 +2,11 @@ import { useState, type SyntheticEvent } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { ErrorBanner } from '@/components/ui/ErrorBanner';
 
-export function LoginForm() {
+export function LoginForm({ expired = false }: { expired?: boolean }) {
   const { login, isLoading, error } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [expiredNotice] = useState(
-    () => new URLSearchParams(window.location.search).get('expired') === '1'
-  );
 
   async function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -66,7 +63,7 @@ export function LoginForm() {
         </div>
       </div>
 
-      <ErrorBanner message={error ?? (expiredNotice ? 'Tu sesión expiró. Iniciá sesión de nuevo.' : null)} />
+      <ErrorBanner message={error ?? (expired ? 'Tu sesión expiró. Iniciá sesión de nuevo.' : null)} />
 
       <button type="submit" className="btn-ingresar" disabled={isLoading}>
         {isLoading ? 'Ingresando…' : 'Ingresar'}
