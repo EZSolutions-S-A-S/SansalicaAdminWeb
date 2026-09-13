@@ -1,6 +1,8 @@
 # build output
 dist/
 .netlify/
+.playwright-cli/
+deno.lock
 
 # generated types
 .astro/

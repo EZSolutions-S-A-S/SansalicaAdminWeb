@@ -3,7 +3,6 @@ import '@/styles/tokens.css';
 import '@/styles/admin.css';
 import { LoginForm } from '@/components/auth/LoginForm';
 import bgLogin from '@/assets/bg-login.svg';
-import logo from '@/assets/logo.svg';
 
 const expired = Astro.url.searchParams.get('expired') === '1';
 ---
@@ -25,10 +24,6 @@ const expired = Astro.url.searchParams.get('expired') === '1';
       <img class="login-bg" src={bgLogin.src} alt="" aria-hidden="true" />
 
       <div class="login-card">
-        <div class="login-logo">
-          <img src={logo.src} alt="Logo Sansalica" class="login-logo__img" />
-        </div>
-
         <LoginForm expired={expired} client:load />
       </div>
     </div>

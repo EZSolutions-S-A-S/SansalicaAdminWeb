@@ -1436,6 +1436,28 @@
   margin-bottom: 8px;
 }
 
+.login-logo__img--loading {
+  animation: login-logo-pulse 1.1s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes login-logo-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 0.82;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-logo__img--loading {
+    animation: none;
+  }
+}
+
 .login-form {
   width: 100%;
   display: flex;
