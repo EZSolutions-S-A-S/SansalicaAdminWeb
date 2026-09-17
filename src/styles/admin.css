@@ -837,6 +837,7 @@
 
 .details-container {
   display: flex;
+  flex-wrap: wrap;
   flex: 1;
   width: 100%;
   justify-content: space-between;
@@ -848,8 +849,8 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  flex: 1;
-  min-width: 0;
+  flex: 1 1 220px;
+  min-width: 220px;
 }
 
 .inmueble-card .title {
@@ -879,6 +880,7 @@
   gap: 40px;
   text-align: right;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .metrics {
@@ -1040,9 +1042,17 @@
   }
   .details-container {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 16px;
     padding: 16px;
+  }
+  .primary-info {
+    flex: none;
+    width: 100%;
+  }
+  .inmueble-card .location {
+    white-space: normal;
+    word-break: break-word;
   }
   .secondary-info {
     width: 100%;
@@ -2148,6 +2158,15 @@
   }
   .detail-specs {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .detail-header h1 {
+    font-size: 26px;
+  }
+  .detail-price {
+    font-size: 24px;
+  }
+  .detail-spec .value {
+    font-size: 18px;
   }
 }
 
