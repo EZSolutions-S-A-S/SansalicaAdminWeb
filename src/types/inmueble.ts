@@ -4,6 +4,41 @@ export type PropertyType = 'Casa' | 'Apartamento' | 'Local Comercial' | 'Terreno
 
 export type InmuebleStatus = 'Disponible' | 'Reservado' | 'Vendido';
 
+export type Departamento =
+  | 'Amazonas'
+  | 'Antioquia'
+  | 'Arauca'
+  | 'Atlántico'
+  | 'Bogotá D.C.'
+  | 'Bolívar'
+  | 'Boyacá'
+  | 'Caldas'
+  | 'Caquetá'
+  | 'Casanare'
+  | 'Cauca'
+  | 'Cesar'
+  | 'Chocó'
+  | 'Cundinamarca'
+  | 'Córdoba'
+  | 'Guainía'
+  | 'Guaviare'
+  | 'Huila'
+  | 'La Guajira'
+  | 'Magdalena'
+  | 'Meta'
+  | 'Nariño'
+  | 'Norte de Santander'
+  | 'Putumayo'
+  | 'Quindío'
+  | 'Risaralda'
+  | 'San Andrés y Providencia'
+  | 'Santander'
+  | 'Sucre'
+  | 'Tolima'
+  | 'Valle del Cauca'
+  | 'Vaupés'
+  | 'Vichada';
+
 export interface InmueblePhoto {
   id: number;
   url: string | null;
@@ -18,6 +53,8 @@ export interface Inmueble {
   price: string;
   square_meters: string;
   location: string;
+  departamento: Departamento | null;
+  ciudad: string | null;
   description: string;
   floor: number | null;
   bedrooms: number | null;
@@ -38,6 +75,8 @@ export interface InmuebleInput {
   price: number;
   square_meters: number;
   location: string;
+  departamento?: Departamento | null;
+  ciudad?: string | null;
   description: string;
   floor?: number | null;
   bedrooms?: number | null;
@@ -58,6 +97,8 @@ export interface InmuebleListParams {
   featured?: boolean;
   min_price?: number;
   max_price?: number;
+  departamento?: Departamento;
+  ciudad?: string;
   search?: string;
   ordering?: 'price' | '-price' | 'square_meters' | '-square_meters' | 'created_at' | '-created_at';
 }

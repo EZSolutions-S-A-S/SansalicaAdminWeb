@@ -3,8 +3,9 @@ import * as inmueblesService from '@/services/http/inmueblesService';
 import { Spinner } from '@/components/ui/Spinner';
 import { ErrorBanner } from '@/components/ui/ErrorBanner';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import type { Inmueble, InmuebleListParams, InmuebleStatus, PropertyType } from '@/types/inmueble';
+import type { Departamento, Inmueble, InmuebleListParams, InmuebleStatus, PropertyType } from '@/types/inmueble';
 import type { PaginatedResponse } from '@/types/api';
+import { DEPARTAMENTOS, CIUDADES_POR_DEPARTAMENTO } from '@/constants/colombiaLocations';
 
 const PROPERTY_TYPES: PropertyType[] = ['Casa', 'Apartamento', 'Local Comercial', 'Terreno', 'Finca'];
 const STATUSES: InmuebleStatus[] = ['Disponible', 'Reservado', 'Vendido'];
@@ -269,6 +270,37 @@ export function InmueblesList({ data, isLoading, error, params, setParams, reloa
                 {status}
               </option>
             ))}
+          </select>
+          <select
+            className="filter-select"
+            value={params.departamento ?? ''}
+            onChange={(e) => {
+              const departamento = (e.target.value || undefined) as Departamento | undefined;
+              setParams((p) => ({ ...p, departamento, ciudad: undefined, page: 1 }));
+            }}
+          >
+            <option value="">Todos los departamentos</option>
+            {DEPARTAMENTOS.map((departamento) => (
+              <option key={departamento} value={departamento}>
+                {departamento}
+              </option>
+            ))}
+          </select>
+          <select
+            className="filter-select"
+            value={params.ciudad ?? ''}
+            disabled={!params.departamento}
+            onChange={(e) =>
+              setParams((p) => ({ ...p, ciudad: e.target.value || undefined, page: 1 }))
+            }
+          >
+            <option value="">{params.departamento ? 'Todas las ciudades' : 'Elegí un departamento'}</option>
+            {params.departamento &&
+              CIUDADES_POR_DEPARTAMENTO[params.departamento].map((ciudad) => (
+                <option key={ciudad} value={ciudad}>
+                  {ciudad}
+                </option>
+              ))}
           </select>
         </div>
       </div>

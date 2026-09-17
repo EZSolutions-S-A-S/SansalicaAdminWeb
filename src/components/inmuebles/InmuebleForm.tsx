@@ -4,7 +4,8 @@ import { ClientApiError } from '@/services/http/httpClient';
 import { mapFieldErrors } from '@/services/http/errorMapping';
 import { ErrorBanner } from '@/components/ui/ErrorBanner';
 import { Lightbox } from '@/components/ui/Lightbox';
-import type { Inmueble, InmuebleInput, OperationType, PropertyType, InmuebleStatus } from '@/types/inmueble';
+import type { Inmueble, InmuebleInput, OperationType, PropertyType, InmuebleStatus, Departamento } from '@/types/inmueble';
+import { DEPARTAMENTOS, CIUDADES_POR_DEPARTAMENTO } from '@/constants/colombiaLocations';
 
 const OPERATION_TYPES: OperationType[] = ['Venta', 'Alquiler'];
 const PROPERTY_TYPES: PropertyType[] = ['Casa', 'Apartamento', 'Local Comercial', 'Terreno', 'Finca'];
@@ -45,6 +46,8 @@ function toInput(inmueble?: Inmueble): InmuebleInput {
       price: 0,
       square_meters: 0,
       location: '',
+      departamento: null,
+      ciudad: '',
       description: '',
       features: [],
       amenities: [],
@@ -59,6 +62,8 @@ function toInput(inmueble?: Inmueble): InmuebleInput {
     price: Number(inmueble.price),
     square_meters: Number(inmueble.square_meters),
     location: inmueble.location,
+    departamento: inmueble.departamento,
+    ciudad: inmueble.ciudad ?? '',
     description: inmueble.description,
     floor: inmueble.floor,
     bedrooms: inmueble.bedrooms,
@@ -351,6 +356,48 @@ export function InmuebleForm({ inmueble, onCreated, onUpdated, onCancel }: Inmue
                 required
               />
               {fieldErrors.location && <span className="field-error">{fieldErrors.location}</span>}
+            </div>
+
+            <div className="form-row two-cols">
+              <div className="form-group">
+                <label htmlFor="departamento">Departamento</label>
+                <select
+                  id="departamento"
+                  value={form.departamento ?? ''}
+                  onChange={(e) => {
+                    const value = (e.target.value || null) as Departamento | null;
+                    update('departamento', value);
+                    update('ciudad', '');
+                  }}
+                >
+                  <option value="">Sin especificar</option>
+                  {DEPARTAMENTOS.map((departamento) => (
+                    <option key={departamento} value={departamento}>
+                      {departamento}
+                    </option>
+                  ))}
+                </select>
+                {fieldErrors.departamento && <span className="field-error">{fieldErrors.departamento}</span>}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="ciudad">Ciudad</label>
+                <select
+                  id="ciudad"
+                  value={form.ciudad ?? ''}
+                  onChange={(e) => update('ciudad', e.target.value)}
+                  disabled={!form.departamento}
+                >
+                  <option value="">{form.departamento ? 'Sin especificar' : 'Elegí un departamento primero'}</option>
+                  {form.departamento &&
+                    CIUDADES_POR_DEPARTAMENTO[form.departamento].map((ciudad) => (
+                      <option key={ciudad} value={ciudad}>
+                        {ciudad}
+                      </option>
+                    ))}
+                </select>
+                {fieldErrors.ciudad && <span className="field-error">{fieldErrors.ciudad}</span>}
+              </div>
             </div>
           </div>
 
