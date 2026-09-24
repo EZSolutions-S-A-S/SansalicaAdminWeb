@@ -1,5 +1,14 @@
+// Implementación de bajo nivel: el ÚNICO módulo del proyecto que hace fetch
+// contra el Django real (BACKEND_API_URL). Todos los repositories (ej.
+// inmuebleRepository.ts) llaman a djangoRequest() en vez de usar fetch
+// directamente, así toda la lógica de headers/errores/caché vive en un
+// solo lugar.
 import type { ApiFieldErrors } from '@/types/api';
 
+// Misma forma que ClientApiError (httpClient.ts) pero del lado servidor:
+// separa la respuesta de Django en detail/code/fieldErrors para que
+// apiRoute.ts (errorResponse) la pueda reenviar al navegador sin perder
+// información.
 export class DjangoApiError extends Error {
   status: number;
   detail?: string;
@@ -86,6 +95,7 @@ function cacheKey(url: string, token?: string | null): string {
 
 export async function djangoRequest<T>(path: string, options: DjangoRequestOptions = {}): Promise<T> {
   const { method = 'GET', token, body, isMultipart, query } = options;
+  // path ej. 'api/admin/inmuebles/' + query -> se concatena con BACKEND_API_URL
   const url = buildUrl(path, query);
 
   if (method === 'GET') {
@@ -96,6 +106,8 @@ export async function djangoRequest<T>(path: string, options: DjangoRequestOptio
   }
 
   const headers: Record<string, string> = {};
+  // Único lugar del proyecto donde el JWT viaja en un header. Es server-to-
+  // server (Astro -> Django) — el navegador nunca ve este token.
   if (token) headers.Authorization = `Bearer ${token}`;
 
   let requestBody: BodyInit | undefined;
